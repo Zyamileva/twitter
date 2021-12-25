@@ -6,9 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class User {
-
-    private UUID id;
+public class User extends PersistentEntity implements Cloneable {
     private String username;
     private String login;
     private String about;
@@ -19,8 +17,6 @@ public class User {
     private boolean officialAccount;
 
     public User() {
-        this.id = UUID.randomUUID();
-        this.registeredSince = LocalDateTime.now();
         this.followerIds = new HashSet<>();
         this.followingIds = new HashSet<>();
         this.officialAccount = false;
@@ -29,19 +25,9 @@ public class User {
     public User(String username, String login) {
         this.username = username;
         this.login = login;
-        this.id = UUID.randomUUID();
-        this.registeredSince = LocalDateTime.now();
         this.followerIds = new HashSet<>();
         this.followingIds = new HashSet<>();
         this.officialAccount = false;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -154,5 +140,24 @@ public class User {
                 ", followingIds=" + followingIds +
                 ", officialAccount=" + officialAccount +
                 '}';
+    }
+
+    @Override
+    public User clone() {
+        try {
+            User clone = (User) super.clone();
+            clone.id = this.id;
+            clone.username = this.username;
+            clone.login = this.login;
+            clone.about = this.about;
+            clone.location = this.location;
+            clone.registeredSince = this.registeredSince;
+            clone.followerIds = new HashSet<>(this.followerIds);
+            clone.followingIds = new HashSet<>(this.followingIds);
+            clone.officialAccount = this.officialAccount;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

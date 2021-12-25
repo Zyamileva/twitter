@@ -3,7 +3,7 @@ package org.zyamileva.twitter.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Like {
+public class Like extends PersistentEntity implements Cloneable {
     private UUID id;
     private UUID userId;
     private UUID tweetId;
@@ -12,12 +12,6 @@ public class Like {
     public Like(UUID userId, UUID tweetId) {
         this.userId = userId;
         this.tweetId = tweetId;
-        this.id = UUID.randomUUID();
-        this.datePosted = LocalDateTime.now();
-    }
-
-    public UUID getId() {
-        return id;
     }
 
     public UUID getUserId() {
@@ -27,6 +21,21 @@ public class Like {
     public UUID getTweetId() {
         return tweetId;
     }
+
+    @Override
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setDatePosted(LocalDateTime datePosted) {
+        this.datePosted = datePosted;
+    }
+
 
     public LocalDateTime getDatePosted() {
         return datePosted;
@@ -58,5 +67,19 @@ public class Like {
                 ", tweetId=" + tweetId +
                 ", datePosted=" + datePosted +
                 '}';
+    }
+
+    @Override
+    public Like clone() {
+        try {
+            Like clone = (Like) super.clone();
+            clone.id = this.id;
+            clone.userId = this.userId;
+            clone.tweetId = this.tweetId;
+            clone.datePosted = this.datePosted;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

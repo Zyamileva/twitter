@@ -6,8 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Tweet {
-    private UUID id;
+public class Tweet extends PersistentEntity implements Cloneable {
     private UUID userId;
     private UUID replyTweetId;
     private LocalDateTime dataPosted;
@@ -17,30 +16,18 @@ public class Tweet {
     private Set<UUID> retweetIds;
 
     public Tweet() {
-        this.id = UUID.randomUUID();
-        this.dataPosted = LocalDateTime.now();
         this.mentionedUserIds = new HashSet<>();
         this.likeIds = new HashSet<>();
         this.retweetIds = new HashSet<>();
     }
 
     public Tweet(UUID userId, String content, Set<UUID> mentionedUserIds) {
-        this.id = UUID.randomUUID();
-        this.dataPosted = LocalDateTime.now();
         this.mentionedUserIds = new HashSet<>();
         this.likeIds = new HashSet<>();
         this.retweetIds = new HashSet<>();
         this.userId = userId;
         this.content = content;
         this.mentionedUserIds = mentionedUserIds;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public UUID getUserId() {
@@ -132,7 +119,7 @@ public class Tweet {
 
     @Override
     public String toString() {
-        return "Twitter{" +
+        return "Tweet{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", replyTweetId=" + replyTweetId +
@@ -142,5 +129,23 @@ public class Tweet {
                 ", likeIds=" + likeIds.size() +
                 ", retweetIds=" + retweetIds.size() +
                 '}';
+    }
+
+    @Override
+    public Tweet clone() {
+        try {
+            Tweet clone = (Tweet) super.clone();
+            clone.id = this.id;
+            clone.userId = this.userId;
+            clone.replyTweetId = this.replyTweetId;
+            clone.dataPosted = this.dataPosted;
+            clone.content = this.content;
+            clone.mentionedUserIds = this.mentionedUserIds;
+            clone.likeIds = this.likeIds;
+            clone.retweetIds = this.retweetIds;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
