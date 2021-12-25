@@ -24,7 +24,7 @@ public class Twitter {
         Tweet firstKateTweet = new Tweet(kate.getId(), "Hello!!!", new HashSet<>());
         Set<UUID> mentionedUsersOnAnnaTweet = new HashSet<>();
         mentionedUsersOnAnnaTweet.add(kate.getId());
-        Tweet firstAnnaTweet = new Tweet(anna.getId(), "Hi all!!!", mentionedUsersOnAnnaTweet);
+        Tweet firstAnnaTweet = new Tweet(anna.getId(), "Hi all and @kate_zyamileva !!!", mentionedUsersOnAnnaTweet);
 
         System.out.println("Tweets: ");
         System.out.println(firstAnnaTweet);
@@ -33,7 +33,6 @@ public class Twitter {
         Like annaLikesKateTweet = new Like(anna.getId(), firstKateTweet.getId());
         System.out.println("Anna likes Kate tweet");
         System.out.println(annaLikesKateTweet);
-        ;
         System.out.println();
 
         firstKateTweet.getLikeIds().add(annaLikesKateTweet.getId());
