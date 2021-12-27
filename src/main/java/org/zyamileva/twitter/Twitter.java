@@ -74,7 +74,7 @@ public class Twitter {
         System.out.println(anotherTweet);
         System.out.println();
 
-        System.out.println("hhh" + tweetDao.findAll());
+        System.out.println(tweetDao.findAll());
 
         System.out.println();
         tweetDao.delete(firstAnnaTweet);

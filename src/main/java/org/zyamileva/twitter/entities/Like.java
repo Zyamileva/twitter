@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Like extends PersistentEntity implements Cloneable {
-    private UUID id;
     private UUID userId;
     private UUID tweetId;
     private LocalDateTime datePosted;
@@ -22,20 +21,9 @@ public class Like extends PersistentEntity implements Cloneable {
         return tweetId;
     }
 
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public void setDatePosted(LocalDateTime datePosted) {
         this.datePosted = datePosted;
     }
-
 
     public LocalDateTime getDatePosted() {
         return datePosted;
