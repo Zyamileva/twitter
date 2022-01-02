@@ -10,26 +10,22 @@ public class RetweetInMemoryDao implements RetweetDao {
 
     @Override
     public Retweet save(Retweet entity) {
-        return Storage.putRetweet(entity);
+        return Storage.getInstance().putRetweet(entity);
     }
 
     @Override
     public Optional<Retweet> findById(UUID id) {
-        Retweet retweet = Storage.getByRetweetId(id);
-        if (retweet == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(retweet);
-        }
+        Retweet retweet = Storage.getInstance().getByRetweetId(id);
+        return Optional.ofNullable(retweet);
     }
 
     @Override
     public Iterable findAll() {
-        return Storage.findAllRetweets();
+        return Storage.getInstance().findAllRetweets();
     }
 
     @Override
     public void delete(Retweet entity) {
-        Storage.deleteRetweet(entity);
+        Storage.getInstance().deleteRetweet(entity);
     }
 }

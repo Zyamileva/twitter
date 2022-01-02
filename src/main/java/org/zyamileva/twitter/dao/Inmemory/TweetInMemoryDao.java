@@ -9,26 +9,22 @@ import java.util.UUID;
 public class TweetInMemoryDao implements TweetDao {
     @Override
     public Tweet save(Tweet entity) {
-        return Storage.putTweet(entity);
+        return Storage.getInstance().putTweet(entity);
     }
 
     @Override
     public Optional<Tweet> findById(UUID id) {
-        Tweet tweet = Storage.getByTweetId(id);
-        if (tweet == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(tweet);
-        }
+        Tweet tweet = Storage.getInstance().getByTweetId(id);
+        return Optional.ofNullable(tweet);
     }
 
     @Override
     public Iterable<Tweet> findAll() {
-        return Storage.findAllTweets();
+        return Storage.getInstance().findAllTweets();
     }
 
     @Override
     public void delete(Tweet entity) {
-        Storage.deleteTweet(entity);
+        Storage.getInstance().deleteTweet(entity);
     }
 }
