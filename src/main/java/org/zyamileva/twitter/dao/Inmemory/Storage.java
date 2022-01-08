@@ -12,12 +12,20 @@ import java.util.List;
 import java.util.UUID;
 
 public class Storage {
-    private static final HashMap<UUID, User> USERS = new HashMap<>();
-    private static final HashMap<UUID, Tweet> TWEETS = new HashMap<>();
-    private static final HashMap<UUID, Like> LIKES = new HashMap<>();
-    private static final HashMap<UUID, Retweet> RETWEET = new HashMap<>();
+    private static class StorageHolder {
+        private static final Storage INSTANCE = new Storage();
+    }
 
-    protected static User putUser(User user) {
+    public static Storage getInstance() {
+        return StorageHolder.INSTANCE;
+    }
+
+    private final HashMap<UUID, User> USERS = new HashMap<>();
+    private final HashMap<UUID, Tweet> TWEETS = new HashMap<>();
+    private final HashMap<UUID, Like> LIKES = new HashMap<>();
+    private final HashMap<UUID, Retweet> RETWEET = new HashMap<>();
+
+    protected User putUser(User user) {
         if (user == null) {
             return null;
         }
@@ -30,11 +38,16 @@ public class Storage {
         return getByUserId(clone.getId());
     }
 
-    protected static User getByUserId(UUID id) {
-        return USERS.get(id).clone();
+    protected User getByUserId(UUID id) {
+        User user = USERS.get(id);
+        if (user != null) {
+            return user.clone();
+        } else {
+            return null;
+        }
     }
 
-    protected static Iterable<User> findAllUsers() {
+    protected Iterable<User> findAllUsers() {
         List<User> users = new ArrayList<>();
         for (User user : USERS.values()) {
             users.add(user.clone());
@@ -42,13 +55,13 @@ public class Storage {
         return users;
     }
 
-    protected static void deleteUser(User entity) {
+    protected void deleteUser(User entity) {
         if (entity != null && entity.getId() != null) {
             USERS.remove(entity.getId());
         }
     }
 
-    protected static Tweet putTweet(Tweet entity) {
+    protected Tweet putTweet(Tweet entity) {
         if (entity == null) {
             return null;
         }
@@ -61,11 +74,16 @@ public class Storage {
         return getByTweetId(clone.getId());
     }
 
-    protected static Tweet getByTweetId(UUID id) {
-        return TWEETS.get(id).clone();
+    protected Tweet getByTweetId(UUID id) {
+        Tweet tweet = TWEETS.get(id);
+        if (tweet != null) {
+            return tweet.clone();
+        } else {
+            return null;
+        }
     }
 
-    protected static Iterable<Tweet> findAllTweets() {
+    protected Iterable<Tweet> findAllTweets() {
         List<Tweet> tweets = new ArrayList<>();
         for (Tweet value : TWEETS.values()) {
             tweets.add(value.clone());
@@ -73,13 +91,13 @@ public class Storage {
         return tweets;
     }
 
-    protected static void deleteTweet(Tweet entity) {
+    protected void deleteTweet(Tweet entity) {
         if (entity != null && entity.getId() != null) {
             TWEETS.remove(entity.getId());
         }
     }
 
-    protected static Like putLike(Like like) {
+    protected Like putLike(Like like) {
         if (like == null) {
             return null;
         }
@@ -92,11 +110,11 @@ public class Storage {
         return getByLikeId(clone.getId());
     }
 
-    protected static Like getByLikeId(UUID id) {
+    protected Like getByLikeId(UUID id) {
         return LIKES.get(id).clone();
     }
 
-    protected static Iterable<Like> findAllLikes() {
+    protected Iterable<Like> findAllLikes() {
         List<Like> likes = new ArrayList<>();
         for (Like like : LIKES.values()) {
             likes.add(like.clone());
@@ -104,13 +122,13 @@ public class Storage {
         return likes;
     }
 
-    protected static void deleteLike(Like like) {
+    protected void deleteLike(Like like) {
         if (like != null && like.getId() != null) {
             LIKES.remove(like.getId());
         }
     }
 
-    protected static Retweet putRetweet(Retweet retweet) {
+    protected Retweet putRetweet(Retweet retweet) {
         if (retweet == null) {
             return null;
         }
@@ -123,11 +141,16 @@ public class Storage {
         return getByRetweetId(clone.getId());
     }
 
-    protected static Retweet getByRetweetId(UUID id) {
-        return RETWEET.get(id).clone();
+    protected Retweet getByRetweetId(UUID id) {
+        Retweet retweet = RETWEET.get(id);
+        if (retweet != null) {
+            return retweet.clone();
+        } else {
+            return null;
+        }
     }
 
-    protected static Iterable<Retweet> findAllRetweets() {
+    protected Iterable<Retweet> findAllRetweets() {
         List<Retweet> retweets = new ArrayList<>();
         for (Retweet retweet : RETWEET.values()) {
             retweets.add(retweet.clone());
@@ -135,9 +158,12 @@ public class Storage {
         return retweets;
     }
 
-    protected static void deleteRetweet(Retweet retweet) {
+    protected void deleteRetweet(Retweet retweet) {
         if (retweet != null && retweet.getId() != null) {
             RETWEET.remove(retweet.getId());
         }
+    }
+
+    private Storage() {
     }
 }

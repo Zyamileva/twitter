@@ -10,26 +10,22 @@ public class LikeInMemoryDao implements LikeDao {
 
     @Override
     public Like save(Like entity) {
-        return Storage.putLike(entity);
+        return Storage.getInstance().putLike(entity);
     }
 
     @Override
     public Optional<Like> findById(UUID id) {
-        Like like = Storage.getByLikeId(id);
-        if (like == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(like);
-        }
+        Like like = Storage.getInstance().getByLikeId(id);
+        return Optional.ofNullable(like);
     }
 
     @Override
     public Iterable findAll() {
-        return Storage.findAllLikes();
+        return Storage.getInstance().findAllLikes();
     }
 
     @Override
     public void delete(Like entity) {
-        Storage.deleteLike(entity);
+        Storage.getInstance().deleteLike(entity);
     }
 }
