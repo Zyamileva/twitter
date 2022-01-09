@@ -1,0 +1,35 @@
+{
+  "configuration": {
+    "status": "error",
+    "name": "Twitter log4j2 config",
+    "appenders": {
+      "Console": {
+        "name": "Console",
+        "PatternLayout": {
+          "pattern": "%highlight{%d{dd MMM yyyy HH:mm:ss} [%t] %-5level %logger{2} - %msg%n%throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}",
+          "disableAnsi": "false"
+        }
+      },
+      "File": {
+        "name": "File",
+        "fileName": "logs/TwitterLogs.txt",
+        "PatternLayout": {
+          "pattern": "%d{dd MMM yyyy HH:mm:ss} [%t] %-5level %logger{2} - %msg%n%throwable"
+        }
+      }
+    },
+    "loggers": {
+      "root": {
+        "level": "info",
+        "AppenderRef": [
+          {
+            "ref": "Console"
+          },
+          {
+            "ref": "File"
+          }
+        ]
+      }
+    }
+  }
+}

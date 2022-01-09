@@ -1,5 +1,7 @@
 package org.zyamileva.twitter.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
@@ -13,6 +15,7 @@ import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao = new UserInMemoryDao();
+    private static final Logger log = LogManager.getLogger("UserServiceImpl.class");
     private int minLengthLogin = 3;
     private int maxLengthLogin = 14;
     private int minLengthUserName = 2;
@@ -24,7 +27,7 @@ public class UserServiceImpl implements UserService {
         if (validationErrors.isEmpty()) {
             return Optional.of(userDao.save(user));
         }
-        System.out.println(validationErrors);
+        log.error(validationErrors);
         return Optional.empty();
 
     }
@@ -69,17 +72,17 @@ public class UserServiceImpl implements UserService {
 
     private boolean manageSubscriptions(UUID initialUserId, UUID subscriberUserId, boolean follow) {
         if (initialUserId.equals(subscriberUserId)) {
-            System.err.println("You can't subscribe youself");
+            log.error("You can't subscribe youself");
             return false;
         }
         Optional<User> initialUserOptional = userDao.findById(initialUserId);
         if (initialUserOptional.isEmpty()) {
-            System.err.println("Invalid userId passed: " + initialUserId);
+            log.error("Invalid userId passed: " + initialUserId);
             return false;
         }
         Optional<User> subscriberUserOptional = userDao.findById(subscriberUserId);
         if (subscriberUserOptional.isEmpty()) {
-            System.err.println("Invalid userId passed: " + subscriberUserId);
+            log.error("Invalid userId passed: " + subscriberUserId);
             return false;
         }
         User initialUser = initialUserOptional.get();
@@ -94,7 +97,7 @@ public class UserServiceImpl implements UserService {
         userDao.save(initialUser);
         userDao.save(subscriberUser);
         String operation = follow ? "subscribed to " : "unsubscribed from ";
-        System.out.println(initialUser.getLogin() + " " + operation + subscriberUser.getLogin());
+        log.error(initialUser.getLogin() + " " + operation + subscriberUser.getLogin());
         return true;
     }
 

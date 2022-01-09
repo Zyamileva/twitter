@@ -1,0 +1,19 @@
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%highlight{%d{dd MMM yyyy HH:mm:ss} [%t] %-5level %logger{2} - %msg%n%throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}"
+                    disableAnsi="false"/>
+        </Console>
+        <File name="File" fileName="logs/TwitterLogs.txt">
+            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss} [%t] %-5level %logger{2} - %msg%n%throwable"
+                           charset="UTF-8"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
