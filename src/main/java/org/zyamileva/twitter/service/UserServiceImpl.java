@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao = new UserInMemoryDao();
-    private static final Logger log = LogManager.getLogger("UserServiceImpl.class");
-    private int minLengthLogin = 3;
-    private int maxLengthLogin = 14;
-    private int minLengthUserName = 2;
-    private int maxLengthUserName = 20;
+    private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
+    private static int MIN_LENGTH_LOGIN = 3;
+    private int MAX_LENGTH_LOGIN = 14;
+    private int MIN_LENGTH_USER_NAME = 2;
+    private int MAX_LENGTH_USER_NAME = 20;
 
     @Override
     public Optional<User> saveUser(User user) {
@@ -38,18 +38,19 @@ public class UserServiceImpl implements UserService {
         if (match) {
             return !match;
         }
-        String regex = "@[a-z_]{" + (minLengthLogin - 1) + "," + (maxLengthLogin - 1) + "}";
+        String regex = "@[a-z_]{" + (MIN_LENGTH_LOGIN - 1) + "," + (MAX_LENGTH_LOGIN - 1) + "}";
         match = Pattern.compile(regex).matcher(login).matches();
         return match;
     }
 
     private boolean validateUserName(String login) {
-        String regex = ".{" + (minLengthUserName) + "," + (maxLengthUserName) + "}";
+        String regex = ".{" + (MIN_LENGTH_USER_NAME) + "," + (MAX_LENGTH_USER_NAME) + "}";
         Pattern pat = Pattern.compile(regex);
         Matcher mat = pat.matcher(login);
         boolean match = mat.matches();
         return match;
     }
+
 
     private Set<String> validateUser(User user) {
         Set<String> validationErrors = new HashSet<>();

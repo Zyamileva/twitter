@@ -8,11 +8,11 @@ import org.zyamileva.twitter.service.UserServiceImpl;
 
 public class Twitter {
     private static final UserService userService = new UserServiceImpl();
-    private static final Logger log = LogManager.getLogger("Twitter.class");
+    private static final Logger log = LogManager.getLogger(Twitter.class);
 
     public static void main(String[] args) {
         User kate = new User("Kate Zyamileva", "@kate_zyam");
-        User anna = new User("Anna Zyamileva", "@a");
+        User anna = new User("Anna Zyamileva", "@_");
         User nikita = new User("Nikita Ivanov", "@nikita_ivanov");
 
         kate.setOfficialAccount(true);
