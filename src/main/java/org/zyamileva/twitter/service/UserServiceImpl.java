@@ -1,5 +1,7 @@
 package org.zyamileva.twitter.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
@@ -13,10 +15,11 @@ import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao = new UserInMemoryDao();
-    private int minLengthLogin = 3;
-    private int maxLengthLogin = 14;
-    private int minLengthUserName = 2;
-    private int maxLengthUserName = 20;
+    private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
+    private static int MIN_LENGTH_LOGIN = 3;
+    private int MAX_LENGTH_LOGIN = 14;
+    private int MIN_LENGTH_USER_NAME = 2;
+    private int MAX_LENGTH_USER_NAME = 20;
 
     @Override
     public Optional<User> saveUser(User user) {
@@ -24,7 +27,7 @@ public class UserServiceImpl implements UserService {
         if (validationErrors.isEmpty()) {
             return Optional.of(userDao.save(user));
         }
-        System.out.println(validationErrors);
+        log.error(validationErrors);
         return Optional.empty();
 
     }
@@ -35,18 +38,19 @@ public class UserServiceImpl implements UserService {
         if (match) {
             return !match;
         }
-        String regex = "@[a-z_]{" + (minLengthLogin - 1) + "," + (maxLengthLogin - 1) + "}";
+        String regex = "@[a-z_]{" + (MIN_LENGTH_LOGIN - 1) + "," + (MAX_LENGTH_LOGIN - 1) + "}";
         match = Pattern.compile(regex).matcher(login).matches();
         return match;
     }
 
     private boolean validateUserName(String login) {
-        String regex = ".{" + (minLengthUserName) + "," + (maxLengthUserName) + "}";
+        String regex = ".{" + (MIN_LENGTH_USER_NAME) + "," + (MAX_LENGTH_USER_NAME) + "}";
         Pattern pat = Pattern.compile(regex);
         Matcher mat = pat.matcher(login);
         boolean match = mat.matches();
         return match;
     }
+
 
     private Set<String> validateUser(User user) {
         Set<String> validationErrors = new HashSet<>();
@@ -69,17 +73,17 @@ public class UserServiceImpl implements UserService {
 
     private boolean manageSubscriptions(UUID initialUserId, UUID subscriberUserId, boolean follow) {
         if (initialUserId.equals(subscriberUserId)) {
-            System.err.println("You can't subscribe youself");
+            log.error("You can't subscribe youself");
             return false;
         }
         Optional<User> initialUserOptional = userDao.findById(initialUserId);
         if (initialUserOptional.isEmpty()) {
-            System.err.println("Invalid userId passed: " + initialUserId);
+            log.error("Invalid userId passed: " + initialUserId);
             return false;
         }
         Optional<User> subscriberUserOptional = userDao.findById(subscriberUserId);
         if (subscriberUserOptional.isEmpty()) {
-            System.err.println("Invalid userId passed: " + subscriberUserId);
+            log.error("Invalid userId passed: " + subscriberUserId);
             return false;
         }
         User initialUser = initialUserOptional.get();
@@ -94,7 +98,7 @@ public class UserServiceImpl implements UserService {
         userDao.save(initialUser);
         userDao.save(subscriberUser);
         String operation = follow ? "subscribed to " : "unsubscribed from ";
-        System.out.println(initialUser.getLogin() + " " + operation + subscriberUser.getLogin());
+        log.error(initialUser.getLogin() + " " + operation + subscriberUser.getLogin());
         return true;
     }
 

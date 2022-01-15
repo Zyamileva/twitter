@@ -1,29 +1,18 @@
 package org.zyamileva.twitter;
 
-import org.zyamileva.twitter.Feed.UserFeed;
-import org.zyamileva.twitter.dao.Inmemory.LikeInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.RetweetInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.TweetInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
-import org.zyamileva.twitter.dao.LikeDao;
-import org.zyamileva.twitter.dao.RetweetDao;
-import org.zyamileva.twitter.dao.TweetDao;
-import org.zyamileva.twitter.dao.UserDao;
-import org.zyamileva.twitter.entities.Like;
-import org.zyamileva.twitter.entities.Retweet;
-import org.zyamileva.twitter.entities.Tweet;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.zyamileva.twitter.entities.User;
 import org.zyamileva.twitter.service.UserService;
 import org.zyamileva.twitter.service.UserServiceImpl;
 
-import java.util.*;
-
 public class Twitter {
     private static final UserService userService = new UserServiceImpl();
+    private static final Logger log = LogManager.getLogger(Twitter.class);
 
     public static void main(String[] args) {
         User kate = new User("Kate Zyamileva", "@kate_zyam");
-        User anna = new User("Anna Zyamileva", "@a__z_");
+        User anna = new User("Anna Zyamileva", "@_");
         User nikita = new User("Nikita Ivanov", "@nikita_ivanov");
 
         kate.setOfficialAccount(true);
@@ -34,6 +23,8 @@ public class Twitter {
         anna = userService.saveUser(anna).orElseThrow();
         nikita = userService.saveUser(nikita).orElseThrow();
 
+        log.info(kate);
+        /*
         userService.subscribe(kate.getId(), anna.getId());
         userService.subscribe(nikita.getId(), anna.getId());
 
@@ -54,6 +45,6 @@ public class Twitter {
         System.out.println(nikita);
 
         System.out.println(userService.findById(UUID.randomUUID()));
-        System.out.println(userService.findById(anna.getId()));
+        System.out.println(userService.findById(anna.getId())); */
     }
 }
