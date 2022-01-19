@@ -11,22 +11,20 @@ public class Tweet extends PersistentEntity implements Cloneable {
     private UUID replyTweetId;
     private LocalDateTime dataPosted;
     private String content;
-    private Set<UUID> mentionedUserIds;
+    private Set<UUID> mentionedUserIds = new HashSet<>();
     private Set<UUID> likeIds;
     private Set<UUID> retweetIds;
 
     public Tweet() {
-        this.mentionedUserIds = new HashSet<>();
         this.likeIds = new HashSet<>();
         this.retweetIds = new HashSet<>();
     }
 
-    public Tweet(UUID userId, String content, Set<UUID> mentionedUserIds) {
+    public Tweet(UUID userId, String content) {
         this.likeIds = new HashSet<>();
         this.retweetIds = new HashSet<>();
         this.userId = userId;
         this.content = content;
-        this.mentionedUserIds = mentionedUserIds;
     }
 
     public UUID getUserId() {

@@ -3,6 +3,7 @@ package org.zyamileva.twitter.dao.Inmemory;
 import org.zyamileva.twitter.dao.TweetDao;
 import org.zyamileva.twitter.entities.Tweet;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public class TweetInMemoryDao implements TweetDao {
     }
 
     @Override
-    public Iterable<Tweet> findAll() {
+    public List<Tweet> findAll() {
         return Storage.getInstance().findAllTweets();
     }
 
