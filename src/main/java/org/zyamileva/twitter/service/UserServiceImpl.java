@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-     static boolean validateLogin(String login) {
+    static boolean validateLogin(String login) {
         boolean match;
         match = Pattern.compile("@_+").matcher(login).matches();
         if (match) {
@@ -101,7 +101,6 @@ public class UserServiceImpl implements UserService {
         BiConsumer<User, User> subscribeConsumer = (initialUser, subscriberUser) -> {
             initialUser.getFollowingIds().add(subscriberUser.getId());
             subscriberUser.getFollowerIds().add(initialUser.getId());
-
             userDao.save(initialUser);
             userDao.save(subscriberUser);
 

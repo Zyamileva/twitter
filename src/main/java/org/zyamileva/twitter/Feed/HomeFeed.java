@@ -2,15 +2,17 @@ package org.zyamileva.twitter.Feed;
 
 import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.entities.User;
+import org.zyamileva.twitter.model.TweetProjection;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 public class HomeFeed extends Feed {
 
     private User user;
 
-    public HomeFeed(User user, Set<Tweet> tweets) {
-        super(tweets);
+    public HomeFeed(User user, TreeSet<TweetProjection> tweetProjections) {
+        super(tweetProjections);
         this.user = user;
     }
 
@@ -19,18 +21,17 @@ public class HomeFeed extends Feed {
     }
 
     @Override
-    public Feed buildFeed() {
-        return null;
-    }
-
-    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("---------->HomeFeed\n").append(user).append("\n");
-        for (Tweet tweet : tweets) {
-            sb.append(tweet).append("\n");
-        }
-        sb.append("*************************");
-        return sb.toString();
+        StringBuilder feed = new StringBuilder();
+        feed
+                .append(NEW_LINE)
+                .append(SEPARATOR)
+                .append(NEW_LINE)
+                .append("Home feed for ")
+                .append(user.getLogin())
+                .append(NEW_LINE);
+        tweetProjections.forEach(tweetForFeed -> feed.append(SEPARATOR).append(NEW_LINE).append(tweetForFeed).append(NEW_LINE));
+        feed.append(SEPARATOR).append(NEW_LINE);
+        return feed.toString();
     }
 }
