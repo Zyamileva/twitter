@@ -3,6 +3,7 @@ package org.zyamileva.twitter.dao.Inmemory;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.entities.Like;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class LikeInMemoryDao implements LikeDao {
     }
 
     @Override
-    public Iterable findAll() {
+    public List<Like> findAll() {
         return Storage.getInstance().findAllLikes();
     }
 

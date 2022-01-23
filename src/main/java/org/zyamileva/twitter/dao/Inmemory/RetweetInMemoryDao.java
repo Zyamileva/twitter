@@ -3,6 +3,7 @@ package org.zyamileva.twitter.dao.Inmemory;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.entities.Retweet;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class RetweetInMemoryDao implements RetweetDao {
     }
 
     @Override
-    public Iterable findAll() {
+    public List<Retweet> findAll() {
         return Storage.getInstance().findAllRetweets();
     }
 

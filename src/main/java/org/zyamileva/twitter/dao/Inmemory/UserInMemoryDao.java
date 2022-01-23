@@ -3,8 +3,11 @@ package org.zyamileva.twitter.dao.Inmemory;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserInMemoryDao implements UserDao {
     @Override
@@ -19,7 +22,7 @@ public class UserInMemoryDao implements UserDao {
     }
 
     @Override
-    public Iterable<User> findAll() {
+    public List findAll() {
         return Storage.getInstance().findAllUsers();
     }
 
@@ -30,12 +33,26 @@ public class UserInMemoryDao implements UserDao {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        Iterable<User> allUsers = Storage.getInstance().findAllUsers();
-        for (User user : allUsers) {
-            if (user.getLogin().equals(login)) {
-                return Optional.of(user.clone());
-            }
-        }
-        return Optional.empty();
+        return Storage.getInstance().findAllUsers()
+                .stream()
+                .filter(user -> user.getLogin().equals(login))
+                .map(User::clone)
+                .findFirst();
+    }
+
+    @Override
+    public Set<User> findByIds(Set<UUID> ids) {
+        return Storage.getInstance().findAllUsers()
+                .stream()
+                .filter(user -> ids.contains(user.getId()))
+                .map(User::clone)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return Storage.getInstance().findAllUsers()
+                .stream()
+                .anyMatch(ids->ids.getId().equals(id));
     }
 }

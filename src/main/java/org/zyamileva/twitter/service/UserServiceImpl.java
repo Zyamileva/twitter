@@ -10,16 +10,19 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao = new UserInMemoryDao();
     private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
-    private static int MIN_LENGTH_LOGIN = 3;
-    private int MAX_LENGTH_LOGIN = 14;
-    private int MIN_LENGTH_USER_NAME = 2;
-    private int MAX_LENGTH_USER_NAME = 20;
+    private static final int MIN_LENGTH_LOGIN = 3;
+    private static final int MAX_LENGTH_LOGIN = 14;
+    private static final int MIN_LENGTH_USER_NAME = 2;
+    private static final int MAX_LENGTH_USER_NAME = 20;
 
     @Override
     public Optional<User> saveUser(User user) {
@@ -32,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private boolean validateLogin(String login) {
+     static boolean validateLogin(String login) {
         boolean match;
         match = Pattern.compile("@_+").matcher(login).matches();
         if (match) {
@@ -51,9 +54,11 @@ public class UserServiceImpl implements UserService {
         return match;
     }
 
-
     private Set<String> validateUser(User user) {
         Set<String> validationErrors = new HashSet<>();
+        if (userDao.findByLogin(user.getLogin()).isPresent()) {
+            validationErrors.add("Such user exists");
+        }
         if (user.getLogin().isEmpty() || user.getLogin().isBlank()) {
             validationErrors.add("Login must not be empty or blank");
         }
@@ -71,7 +76,7 @@ public class UserServiceImpl implements UserService {
         return validationErrors;
     }
 
-    private boolean manageSubscriptions(UUID initialUserId, UUID subscriberUserId, boolean follow) {
+    private boolean manageSubscriptions(UUID initialUserId, UUID subscriberUserId, BiConsumer<User, User> action) {
         if (initialUserId.equals(subscriberUserId)) {
             log.error("You can't subscribe youself");
             return false;
@@ -86,37 +91,52 @@ public class UserServiceImpl implements UserService {
             log.error("Invalid userId passed: " + subscriberUserId);
             return false;
         }
-        User initialUser = initialUserOptional.get();
-        User subscriberUser = subscriberUserOptional.get();
-        if (follow) {
-            initialUser.getFollowingIds().add(subscriberUserId);
-            subscriberUser.getFollowerIds().add(initialUserId);
-        } else {
-            initialUser.getFollowingIds().remove(subscriberUserId);
-            subscriberUser.getFollowerIds().remove(initialUserId);
-        }
-        userDao.save(initialUser);
-        userDao.save(subscriberUser);
-        String operation = follow ? "subscribed to " : "unsubscribed from ";
-        log.error(initialUser.getLogin() + " " + operation + subscriberUser.getLogin());
+
+        action.accept(initialUserOptional.get(), subscriberUserOptional.get());
         return true;
     }
 
     @Override
     public boolean subscribe(UUID initialUserId, UUID subscriberUserId) {
-        manageSubscriptions(initialUserId, subscriberUserId, true);
-        return true;
+        BiConsumer<User, User> subscribeConsumer = (initialUser, subscriberUser) -> {
+            initialUser.getFollowingIds().add(subscriberUser.getId());
+            subscriberUser.getFollowerIds().add(initialUser.getId());
+
+            userDao.save(initialUser);
+            userDao.save(subscriberUser);
+
+            log.info(initialUser.getLogin() + " subscribed to " + subscriberUser.getLogin());
+        };
+        return manageSubscriptions(initialUserId, subscriberUserId, subscribeConsumer);
     }
 
     @Override
     public boolean unsubscribe(UUID initialUserId, UUID subscriberUserId) {
-        manageSubscriptions(initialUserId, subscriberUserId, false);
-        return true;
+        BiConsumer<User, User> subscribeConsumer = (initialUser, subscriberUser) -> {
+            initialUser.getFollowingIds().remove(subscriberUser.getId());
+            subscriberUser.getFollowerIds().remove(initialUser.getId());
+
+            userDao.save(initialUser);
+            userDao.save(subscriberUser);
+
+            log.info(initialUser.getLogin() + " unsubscribed from " + subscriberUser.getLogin());
+        };
+        return manageSubscriptions(initialUserId, subscriberUserId, subscribeConsumer);
     }
 
     @Override
     public Optional<User> findById(UUID id) {
         return userDao.findById(id);
+    }
+
+    @Override
+    public Set<User> findByIds(Set<UUID> ids) {
+        return userDao.findByIds(ids);
+    }
+
+    @Override
+    public boolean existById(UUID id) {
+        return userDao.existsById(id);
     }
 
     @Override

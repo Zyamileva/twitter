@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Storage {
     private static class StorageHolder {
@@ -39,6 +40,9 @@ public class Storage {
     }
 
     protected User getByUserId(UUID id) {
+        USERS.values().stream()
+                .map(user -> user.clone())
+                .collect(Collectors.toList());
         User user = USERS.get(id);
         if (user != null) {
             return user.clone();
@@ -47,12 +51,11 @@ public class Storage {
         }
     }
 
-    protected Iterable<User> findAllUsers() {
-        List<User> users = new ArrayList<>();
-        for (User user : USERS.values()) {
-            users.add(user.clone());
-        }
-        return users;
+    protected List<User> findAllUsers() {
+        return this.USERS.values()
+                .stream()
+                .map(User::clone)
+                .collect(Collectors.toList());
     }
 
     protected void deleteUser(User entity) {
@@ -83,12 +86,11 @@ public class Storage {
         }
     }
 
-    protected Iterable<Tweet> findAllTweets() {
-        List<Tweet> tweets = new ArrayList<>();
-        for (Tweet value : TWEETS.values()) {
-            tweets.add(value.clone());
-        }
-        return tweets;
+    protected List<Tweet> findAllTweets() {
+        return this.TWEETS.values()
+                .stream()
+                .map(Tweet::clone)
+                .collect(Collectors.toList());
     }
 
     protected void deleteTweet(Tweet entity) {
@@ -114,12 +116,11 @@ public class Storage {
         return LIKES.get(id).clone();
     }
 
-    protected Iterable<Like> findAllLikes() {
-        List<Like> likes = new ArrayList<>();
-        for (Like like : LIKES.values()) {
-            likes.add(like.clone());
-        }
-        return likes;
+    protected List<Like> findAllLikes() {
+        return this.LIKES.values()
+                .stream()
+                .map(Like::clone)
+                .collect(Collectors.toList());
     }
 
     protected void deleteLike(Like like) {
@@ -150,12 +151,11 @@ public class Storage {
         }
     }
 
-    protected Iterable<Retweet> findAllRetweets() {
-        List<Retweet> retweets = new ArrayList<>();
-        for (Retweet retweet : RETWEET.values()) {
-            retweets.add(retweet.clone());
-        }
-        return retweets;
+    protected List<Retweet> findAllRetweets() {
+        return this.RETWEET.values()
+                .stream()
+                .map(Retweet::clone)
+                .collect(Collectors.toList());
     }
 
     protected void deleteRetweet(Retweet retweet) {
