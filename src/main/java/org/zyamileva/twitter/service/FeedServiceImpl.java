@@ -18,6 +18,20 @@ public class FeedServiceImpl implements FeedService {
     private final TweetService tweetService = new TweetServiceImpl();
     private static final Logger log = LogManager.getLogger(TweetService.class);
 
+    private TreeSet<TweetProjection> getTweetProjections(Set<Tweet> tweets, Map<UUID, User> authorIdToAuthor) {
+        return tweets
+                .stream()
+                .map(tweet -> new TweetProjection(
+                        authorIdToAuthor.get(tweet.getUserId()).getUsername(),
+                        authorIdToAuthor.get(tweet.getUserId()).getLogin(),
+                        tweet.getDataPosted(),
+                        tweet.getContent(),
+                        tweet.getLikeIds().size(),
+                        tweet.getRetweetIds().size()
+                ))
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
     @Override
     public UserFeed buildUserFeed(UUID userId) {
         Optional<User> userOptional = userService.findById(userId);
@@ -35,17 +49,7 @@ public class FeedServiceImpl implements FeedService {
                 .stream()
                 .collect(Collectors.toMap(tweet -> tweet.getUserId(), tweet -> userService.findById(tweet.getUserId()).get()));
 
-        TreeSet<TweetProjection> tweetProjections = tweets
-                .stream()
-                .map(tweet -> new TweetProjection(
-                        authorIdToAutor.get(tweet.getUserId()).getUsername(),
-                        authorIdToAutor.get(tweet.getUserId()).getLogin(),
-                        tweet.getDataPosted(),
-                        tweet.getContent(),
-                        tweet.getLikeIds().size(),
-                        tweet.getRetweetIds().size()
-                ))
-                .collect(Collectors.toCollection(TreeSet::new));
+        TreeSet tweetProjections = getTweetProjections(tweets, authorIdToAutor);
         return new UserFeed(user, tweetProjections);
     }
 
@@ -64,18 +68,7 @@ public class FeedServiceImpl implements FeedService {
                 .stream()
                 .collect(Collectors.toMap(PersistentEntity::getId, author -> author));
 
-        TreeSet<TweetProjection> tweetProjections = followingTweets
-                .stream()
-                .map(tweet -> new TweetProjection(
-                        authorIdToAutor.get(tweet.getUserId()).getUsername(),
-                        authorIdToAutor.get(tweet.getUserId()).getLogin(),
-                        tweet.getDataPosted(),
-                        tweet.getContent(),
-                        tweet.getLikeIds().size(),
-                        tweet.getRetweetIds().size()
-                ))
-                .collect(Collectors.toCollection(TreeSet::new));
-
+        TreeSet tweetProjections = getTweetProjections(followingTweets, authorIdToAutor);
         return new HomeFeed(user, tweetProjections);
     }
 
@@ -89,26 +82,15 @@ public class FeedServiceImpl implements FeedService {
         Tweet tweet = tweetOptional.get();
         List<Tweet> tweets = tweetService.findAllTweet()
                 .stream()
-                .filter(tweetList1 -> tweetList1.getReplyTweetId() != null)
-                .filter(tweetList -> tweetList.getReplyTweetId().equals(tweet.getId()))
+                .filter(tweetList -> (tweetList.getReplyTweetId() != null) && (tweetList.getReplyTweetId().equals(tweet.getId())))
                 .collect(Collectors.toList());
 
         Map<UUID, User> authorIdToAutor = tweets
                 .stream()
                 .collect(Collectors.toMap(tweetStream -> tweetStream.getUserId(), tweetStream -> userService.findById(tweetStream.getUserId()).get()));
 
-        TreeSet<TweetProjection> tweetProjections = tweets
-                .stream()
-                .map(tweetList -> new TweetProjection(
-                        authorIdToAutor.get(tweetList.getUserId()).getUsername(),
-                        authorIdToAutor.get(tweetList.getUserId()).getLogin(),
-                        tweetList.getDataPosted(),
-                        tweetList.getContent(),
-                        tweetList.getLikeIds().size(),
-                        tweetList.getRetweetIds().size()
-                ))
-                .collect(Collectors.toCollection(TreeSet::new));
-
+        Set tweetsSet = new HashSet<>(tweets);
+        TreeSet tweetProjections = getTweetProjections(tweetsSet, authorIdToAutor);
         return new ReplyFeed(tweet, tweetProjections);
     }
 }
