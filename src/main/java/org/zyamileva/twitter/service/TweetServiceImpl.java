@@ -15,21 +15,18 @@ import org.zyamileva.twitter.entities.Retweet;
 import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.entities.User;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TweetServiceImpl implements TweetService {
+    private static final Logger log = LogManager.getLogger(TweetService.class);
     private final TweetDao tweetDao = new TweetInMemoryDao();
     private final UserDao userDao = new UserInMemoryDao();
     private final RetweetDao retweetDao = new RetweetInMemoryDao();
     private final LikeDao likeDao = new LikeInMemoryDao();
     private final UserService userService = new UserServiceImpl();
-    private static final Logger log = LogManager.getLogger(TweetService.class);
     private static final int MAX_LENGTH = 140;
 
     @Override
@@ -65,7 +62,6 @@ public class TweetServiceImpl implements TweetService {
         }
         if (errors.isEmpty()) {
             tweet.setMentionedUserIds(uuids);
-            tweetDao.save(tweet);
             return errors;
         }
         return errors;
@@ -78,17 +74,17 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public Set<Tweet> findFollowingTweets(Set<UUID> userIds) {
-        return null;
+        return tweetDao.findFollowingTweets(userIds);
     }
 
     @Override
     public Set<Tweet> findTweetsByUserId(UUID userId) {
-        return null;
+        return tweetDao.findTweetsByUserId(userId);
     }
 
     @Override
     public Set<Tweet> findRetweetsByUserId(UUID userId) {
-        return null;
+        return tweetDao.findRetweetsByUserId(userId);
     }
 
     @Override
@@ -111,6 +107,11 @@ public class TweetServiceImpl implements TweetService {
             tweetDao.save(tweetDao.findById(tweetId).get());
         };
         return actionWithTweet(userId, tweetId, retweetConsumer);
+    }
+
+    @Override
+    public List<Tweet> findAllTweet() {
+        return tweetDao.findAll();
     }
 
     private boolean actionWithTweet(UUID userId, UUID tweetId, BiConsumer<UUID, UUID> action) {

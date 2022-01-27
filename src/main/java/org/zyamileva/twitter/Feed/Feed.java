@@ -1,26 +1,18 @@
 package org.zyamileva.twitter.Feed;
 
 import org.zyamileva.twitter.entities.Tweet;
+import org.zyamileva.twitter.model.TweetProjection;
 
+import javax.naming.ldap.PagedResultsControl;
 import java.util.Set;
+import java.util.TreeSet;
 
 public abstract class Feed {
-    protected Set<Tweet> tweets;
+    protected static final String SEPARATOR = "__________________________________________________________";
+    protected static final String NEW_LINE = ("\n");
+    protected TreeSet<TweetProjection> tweetProjections;
 
-    public Feed(Set<Tweet> tweets) {
-        this.tweets = tweets;
-    }
-
-    public Set<Tweet> getTweets() {
-        return tweets;
-    }
-
-    public abstract Feed buildFeed();
-
-    @Override
-    public String toString() {
-        return "Feed{" +
-                "tweets=" + tweets +
-                '}';
+    public Feed(TreeSet<TweetProjection> tweetProjections) {
+        this.tweetProjections = tweetProjections;
     }
 }
