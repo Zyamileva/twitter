@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Storage {
+class Storage {
     private static class StorageHolder {
         private static final Storage INSTANCE = new Storage();
     }
