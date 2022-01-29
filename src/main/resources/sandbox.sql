@@ -100,15 +100,38 @@ delete from tweets
 where id = '4949953e-2d04-46d6-80d1-2b44f2a0452e';
 
 insert into likes values
-('79b8527e-7bec-4dc3-b4e8-a6394cbb657f', 'bd477886-20c4-4fcf-888c-23306ae3f883', now()
+(random_uuid(),'79b8527e-7bec-4dc3-b4e8-a6394cbb657f', 'bd477886-20c4-4fcf-888c-23306ae3f883', now()
 );
 
 select *
 from likes;
 
 insert into retweets values
-('79b8527e-7bec-4dc3-b4e8-a6394cbb657f', 'bd477886-20c4-4fcf-888c-23306ae3f883', now()
+(random_uuid(), '79b8527e-7bec-4dc3-b4e8-a6394cbb657f', 'bd477886-20c4-4fcf-888c-23306ae3f883', now()
 );
 
 select *
 from retweets;
+
+DROP TABLE likes;
+DROP TABLE RETWEETS;
+
+create table if not exists likes(
+    id uuid primary key,
+    user_id uuid not null,
+    tweet_id uuid not null,
+    date_posted timestamp not null,
+    constraint pair_like unique (user_id, tweet_id),
+    foreign key (user_id) references users(id),
+    foreign key (tweet_id) references tweets(id)
+);
+
+create table if not exists retweets(
+    id uuid primary key,
+    user_id uuid not null,
+    tweet_id uuid not null,
+    date_posted timestamp not null,
+    constraint pair_retweet unique (user_id, tweet_id),
+    foreign key (user_id) references users(id),
+    foreign key (tweet_id) references tweets(id)
+);

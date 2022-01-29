@@ -92,7 +92,6 @@ public class TweetServiceImpl implements TweetService {
         BiConsumer<UUID, UUID> likeConsumer = (userIdConsumer, tweetIdConsumer) -> {
             Like like = new Like(userIdConsumer, tweetIdConsumer);
             like = likeDao.save(like);
-            tweetDao.findById(tweetId).get().getLikeIds().add(like.getId());
             tweetDao.save(tweetDao.findById(tweetId).get());
         };
         return actionWithTweet(userId, tweetId, likeConsumer);
@@ -103,7 +102,6 @@ public class TweetServiceImpl implements TweetService {
         BiConsumer<UUID, UUID> retweetConsumer = (userIdConsumer, tweetIdConsumer) -> {
             Retweet retweet = new Retweet(userIdConsumer, tweetIdConsumer);
             retweet = retweetDao.save(retweet);
-            tweetDao.findById(tweetId).get().getRetweetIds().add(retweet.getId());
             tweetDao.save(tweetDao.findById(tweetId).get());
         };
         return actionWithTweet(userId, tweetId, retweetConsumer);
