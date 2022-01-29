@@ -38,7 +38,7 @@ public class Twitter {
         log.info(kate);
 
         User ann = new User("Anna Zyamikleva", "@___j");
-        // ann = userService.saveUser(ann).orElseThrow();
+        //  ann = userService.saveUser(ann).orElseThrow();
 
         Tweet tweetAnna = new Tweet(anna.getId(), "Hello @nikita_ivanov !");
         Tweet tweetKate = new Tweet(kate.getId(), "Hello @___j and @nikita_ivanov !");

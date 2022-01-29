@@ -20,4 +20,6 @@ public interface UserService {
     boolean existById(UUID id);
 
     Optional<User> findByLogin(String login);
+
+    void delete(User user);
 }

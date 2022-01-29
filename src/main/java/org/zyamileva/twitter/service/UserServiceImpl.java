@@ -145,4 +145,9 @@ public class UserServiceImpl implements UserService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public void delete(User user) {
+
+    }
 }
