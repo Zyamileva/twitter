@@ -35,7 +35,6 @@ public class Twitter {
 
         //kate.setLocation("Odessa");
         //userService.saveUser(kate);
-
         //System.out.println(userService.findById(kate.getId()).orElseThrow());
 
         //  userService.delete(nikita);
