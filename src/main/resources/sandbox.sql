@@ -117,5 +117,5 @@ insert into retweets values
 select *
 from retweets;
 
-drop likes;
 
+drop likes;
