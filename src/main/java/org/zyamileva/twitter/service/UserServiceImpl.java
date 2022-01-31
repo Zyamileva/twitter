@@ -2,9 +2,7 @@ package org.zyamileva.twitter.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.UserResultSetMapper;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
 
@@ -165,6 +163,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
-
+        userDao.delete(user);
     }
 }

@@ -23,19 +23,23 @@ create table if not exists tweets(
 );
 
 create table if not exists likes(
+    id uuid primary key,
     user_id uuid not null,
     tweet_id uuid not null,
     date_posted timestamp not null,
     foreign key (user_id) references users(id),
-    foreign key (tweet_id) references tweets(id)
+    foreign key (tweet_id) references tweets(id),
+    constraint pair_like unique (user_id, tweet_id)
 );
 
 create table if not exists retweets(
+    id uuid primary key,
     user_id uuid not null,
     tweet_id varchar(1) not null,
     date_posted timestamp not null,
     foreign key (user_id) references users(id),
-    foreign key (tweet_id) references tweets(id)
+    foreign key (tweet_id) references tweets(id),
+    constraint pair_retweet unique (user_id, tweet_id)
 );
 
 alter table retweets alter column tweet_id set data type uuid
@@ -112,3 +116,6 @@ insert into retweets values
 
 select *
 from retweets;
+
+drop likes;
+

@@ -97,8 +97,6 @@ public class Tweet extends PersistentEntity implements Cloneable {
                 ", dataPosted=" + dataPosted +
                 ", content='" + content + '\'' +
                 ", mentionedUserIds=" + mentionedUserIds +
-               // ", likeIds=" + likeIds.size() +
-                //", retweetIds=" + retweetIds.size() +
                 '}';
     }
 
@@ -112,8 +110,6 @@ public class Tweet extends PersistentEntity implements Cloneable {
             clone.dataPosted = this.dataPosted;
             clone.content = this.content;
             clone.mentionedUserIds = this.mentionedUserIds;
-         //   clone.likeIds = this.likeIds;
-         //   clone.retweetIds = this.retweetIds;
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

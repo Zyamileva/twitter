@@ -12,6 +12,7 @@ import org.zyamileva.twitter.service.TweetService;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
 
@@ -64,7 +65,7 @@ public class UserJDBCDao implements UserDao {
 
     private User createUser(User entity) {
         final String createUserQuery = """
-                inser into users(username, login, about, location, registered_since,follower_ids, following_ids, official_account)
+                insert into users(id, username, login, about, location, registered_since,follower_ids, following_ids, official_account)
                 values (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         try {
@@ -97,16 +98,16 @@ public class UserJDBCDao implements UserDao {
     @Override
     public Optional<User> findById(UUID id) {
         final String findByIdQuery = """
-               select *
-               from users
-               where id = ?
-                """;
+                select *
+                from users
+                where id = ?
+                 """;
         try {
             Connection connection = DriverManager.getConnection(H2_URL);
             PreparedStatement ps = connection.prepareStatement(findByIdQuery);
             ps.setObject(1, id);
             ResultSet resultSet = ps.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 return Optional.of(userResultSetMapper.map(resultSet));
             }
         } catch (SQLException e) {
@@ -119,9 +120,9 @@ public class UserJDBCDao implements UserDao {
     @Override
     public List findAll() {
         final String findALLUsersQuery = """
-               select *
-               from users
-                """;
+                select *
+                from users
+                 """;
         List<User> users = new ArrayList<>();
         try {
             Connection connection = DriverManager.getConnection(H2_URL);
@@ -139,38 +140,90 @@ public class UserJDBCDao implements UserDao {
 
     @Override
     public void delete(User entity) {
-
+        final String deleteQuery = """
+                delete from users
+                where id = ?
+                """;
+        try {
+            Connection connection = DriverManager.getConnection(H2_URL);
+            PreparedStatement ps = connection.prepareStatement(deleteQuery);
+            ps.setObject(1, entity.getId());
+            ps.execute();
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error("Error during delete user " + entity);
+        }
     }
 
     @Override
     public Optional<User> findByLogin(String login) {
         final String findByLoginQuery = """
-               select *
-               from users
-               where login = ?
-                """;
+                select *
+                from users
+                where login = ?
+                 """;
         try {
             Connection connection = DriverManager.getConnection(H2_URL);
             PreparedStatement ps = connection.prepareStatement(findByLoginQuery);
             ps.setObject(1, login);
             ResultSet resultSet = ps.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 return Optional.of(userResultSetMapper.map(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during find user by login " + login);
         }
-            return Optional.empty();
-        }
+        return Optional.empty();
+    }
 
     @Override
     public Set<User> findByIds(Set<UUID> ids) {
-        return null;
+        String findByIdsQuery = """
+                select *
+                from users
+                where id IN (?)
+                """;
+        Set<User> users = new HashSet<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(H2_URL);
+            String inClause = ids.stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining("', '", "'", "'"));
+            findByIdsQuery = findByIdsQuery.replace("?", inClause);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(findByIdsQuery);
+            while (resultSet.next()) {
+                users.add(userResultSetMapper.map(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error("Error during fetching users");
+        }
+        return users;
     }
 
     @Override
     public boolean existsById(UUID id) {
+        final String existsByIdQuery = """
+                select * 
+                from users
+                where id = ?
+                """;
+        try {
+            Connection connection = DriverManager.getConnection(H2_URL);
+            PreparedStatement ps = connection.prepareStatement(existsByIdQuery);
+            ps.setObject(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error("Error during existsById id " + id);
+        }
         return false;
     }
 }
