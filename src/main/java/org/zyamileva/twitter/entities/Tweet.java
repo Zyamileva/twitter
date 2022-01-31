@@ -11,18 +11,13 @@ public class Tweet extends PersistentEntity implements Cloneable {
     private UUID replyTweetId;
     private LocalDateTime dataPosted;
     private String content;
-    private Set<UUID> mentionedUserIds = new HashSet<>();
-    private Set<UUID> likeIds;
-    private Set<UUID> retweetIds;
+    private Set<UUID> mentionedUserIds;
 
     public Tweet() {
-        this.likeIds = new HashSet<>();
-        this.retweetIds = new HashSet<>();
+        this.mentionedUserIds = new HashSet<>();
     }
 
     public Tweet(UUID userId, String content) {
-        this.likeIds = new HashSet<>();
-        this.retweetIds = new HashSet<>();
         this.userId = userId;
         this.content = content;
     }
@@ -67,50 +62,29 @@ public class Tweet extends PersistentEntity implements Cloneable {
         this.mentionedUserIds = mentionedUserIds;
     }
 
-    public Set<UUID> getLikeIds() {
-        return likeIds;
-    }
-
-    public void setLikeIds(Set<UUID> likeIds) {
-        this.likeIds = likeIds;
-    }
-
-    public Set<UUID> getRetweetIds() {
-        return retweetIds;
-    }
-
-    public void setRetweetIds(Set<UUID> retweetIds) {
-        this.retweetIds = retweetIds;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Tweet tweet = (Tweet) o;
 
-        if (!Objects.equals(id, tweet.id)) return false;
         if (!userId.equals(tweet.userId)) return false;
         if (!Objects.equals(replyTweetId, tweet.replyTweetId)) return false;
-        if (!Objects.equals(dataPosted, tweet.dataPosted)) return false;
+        if (!dataPosted.equals(tweet.dataPosted)) return false;
         if (!content.equals(tweet.content)) return false;
-        if (!Objects.equals(mentionedUserIds, tweet.mentionedUserIds))
-            return false;
-        if (!Objects.equals(likeIds, tweet.likeIds)) return false;
-        return Objects.equals(retweetIds, tweet.retweetIds);
+        return mentionedUserIds.equals(tweet.mentionedUserIds);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = super.hashCode();
         result = 31 * result + userId.hashCode();
         result = 31 * result + (replyTweetId != null ? replyTweetId.hashCode() : 0);
-        result = 31 * result + (dataPosted != null ? dataPosted.hashCode() : 0);
+        result = 31 * result + dataPosted.hashCode();
         result = 31 * result + content.hashCode();
-        result = 31 * result + (mentionedUserIds != null ? mentionedUserIds.hashCode() : 0);
-        result = 31 * result + (likeIds != null ? likeIds.hashCode() : 0);
-        result = 31 * result + (retweetIds != null ? retweetIds.hashCode() : 0);
+        result = 31 * result + mentionedUserIds.hashCode();
         return result;
     }
 
@@ -123,8 +97,6 @@ public class Tweet extends PersistentEntity implements Cloneable {
                 ", dataPosted=" + dataPosted +
                 ", content='" + content + '\'' +
                 ", mentionedUserIds=" + mentionedUserIds +
-                ", likeIds=" + likeIds.size() +
-                ", retweetIds=" + retweetIds.size() +
                 '}';
     }
 
@@ -138,8 +110,6 @@ public class Tweet extends PersistentEntity implements Cloneable {
             clone.dataPosted = this.dataPosted;
             clone.content = this.content;
             clone.mentionedUserIds = this.mentionedUserIds;
-            clone.likeIds = this.likeIds;
-            clone.retweetIds = this.retweetIds;
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

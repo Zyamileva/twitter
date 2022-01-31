@@ -41,8 +41,8 @@ public class ReplyFeed extends Feed {
                         userService.findById(tweet.getUserId()).get().getLogin(),
                         tweet.getDataPosted(),
                         tweet.getContent(),
-                        tweet.getLikeIds().size(),
-                        tweet.getRetweetIds().size()
+                        0,
+                        0
                 ))
                 .append(NEW_LINE);
 

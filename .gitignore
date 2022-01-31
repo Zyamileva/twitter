@@ -1,3 +1,5 @@
 /twitter.iml
 /.idea/
 target
+/db/
+/logs/
