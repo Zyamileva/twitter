@@ -40,9 +40,6 @@ class Storage {
     }
 
     protected User getByUserId(UUID id) {
-        USERS.values().stream()
-                .map(user -> user.clone())
-                .collect(Collectors.toList());
         User user = USERS.get(id);
         if (user != null) {
             return user.clone();
