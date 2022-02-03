@@ -21,6 +21,14 @@ public class Like extends PersistentEntity implements Cloneable {
         return tweetId;
     }
 
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public void setTweetId(UUID tweetId) {
+        this.tweetId = tweetId;
+    }
+
     public void setDatePosted(LocalDateTime datePosted) {
         this.datePosted = datePosted;
     }

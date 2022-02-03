@@ -72,7 +72,7 @@ public class UserJDBCDao implements UserDao {
             Connection connection = DriverManager.getConnection(H2_URL);
             User savedUser = entity.clone();
             savedUser.setId(UUID.randomUUID());
-            savedUser.setRegisteredSince((LocalDateTime.now()));
+            savedUser.setRegisteredSince(LocalDateTime.now());
 
             PreparedStatement ps = connection.prepareStatement(createUserQuery);
             ps.setObject(1, savedUser.getId());
