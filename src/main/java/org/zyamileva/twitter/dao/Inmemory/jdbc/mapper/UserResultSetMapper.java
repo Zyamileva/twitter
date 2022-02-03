@@ -22,17 +22,9 @@ public class UserResultSetMapper implements ResultSetMapper<User> {
         user.setLocation(resultSet.getString("location"));
         user.setRegisteredSince(resultSet.getTimestamp("registered_since").toLocalDateTime());
 
-        Object[] followingIdsArray = (Object[]) resultSet.getArray("following_ids").getArray();
-        Set<UUID> followingIds = Arrays.stream(followingIdsArray)
-                .map(id -> UUID.fromString(id.toString()))
-                .collect(Collectors.toSet());
-        user.setFollowingIds(followingIds);
+        user.setFollowingIds(uuids(resultSet, "following_ids"));
 
-        Object[] followerIdsArray = (Object[]) resultSet.getArray("follower_ids").getArray();
-        Set<UUID> followerIds = Arrays.stream(followerIdsArray)
-                .map(id -> UUID.fromString(id.toString()))
-                .collect(Collectors.toSet());
-        user.setFollowerIds(followerIds);
+        user.setFollowerIds(uuids(resultSet, "follower_ids"));
 
         user.setOfficialAccount(resultSet.getBoolean("official_account"));
         return user;

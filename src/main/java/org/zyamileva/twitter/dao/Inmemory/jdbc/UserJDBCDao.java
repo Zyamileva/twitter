@@ -41,8 +41,7 @@ public class UserJDBCDao implements UserDao {
                    official_account = ?
                 where id = ?
                 """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(updateUserQuery);
             ps.setObject(1, entity.getUsername());
             ps.setObject(2, entity.getLogin());
@@ -56,11 +55,13 @@ public class UserJDBCDao implements UserDao {
             connection.commit();
 
             return entity;
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during user creation");
             return null;
         }
+
     }
 
     private User createUser(User entity) {
@@ -68,8 +69,7 @@ public class UserJDBCDao implements UserDao {
                 insert into users(id, username, login, about, location, registered_since,follower_ids, following_ids, official_account)
                 values (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             User savedUser = entity.clone();
             savedUser.setId(UUID.randomUUID());
             savedUser.setRegisteredSince((LocalDateTime.now()));
@@ -102,15 +102,15 @@ public class UserJDBCDao implements UserDao {
                 from users
                 where id = ?
                  """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(findByIdQuery);
             ps.setObject(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(userResultSetMapper.map(resultSet));
             }
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during find user by id " + id);
         }
@@ -124,14 +124,14 @@ public class UserJDBCDao implements UserDao {
                 from users
                  """;
         List<User> users = new ArrayList<>();
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(findALLUsersQuery);
             while (resultSet.next()) {
                 users.add(userResultSetMapper.map(resultSet));
             }
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during find all users");
         }
@@ -144,16 +144,17 @@ public class UserJDBCDao implements UserDao {
                 delete from users
                 where id = ?
                 """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(deleteQuery);
             ps.setObject(1, entity.getId());
             ps.execute();
             connection.commit();
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during delete user " + entity);
         }
+
     }
 
     @Override
@@ -163,15 +164,15 @@ public class UserJDBCDao implements UserDao {
                 from users
                 where login = ?
                  """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(findByLoginQuery);
             ps.setObject(1, login);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(userResultSetMapper.map(resultSet));
             }
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during find user by login " + login);
         }
@@ -187,8 +188,7 @@ public class UserJDBCDao implements UserDao {
                 """;
         Set<User> users = new HashSet<>();
 
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             String inClause = ids.stream()
                     .map(Object::toString)
                     .collect(Collectors.joining("', '", "'", "'"));
@@ -198,7 +198,8 @@ public class UserJDBCDao implements UserDao {
             while (resultSet.next()) {
                 users.add(userResultSetMapper.map(resultSet));
             }
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during fetching users");
         }
@@ -212,15 +213,15 @@ public class UserJDBCDao implements UserDao {
                 from users
                 where id = ?
                 """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(existsByIdQuery);
             ps.setObject(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
                 return true;
             }
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
             e.printStackTrace();
             log.error("Error during existsById id " + id);
         }

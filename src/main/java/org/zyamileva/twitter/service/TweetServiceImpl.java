@@ -112,17 +112,19 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public void delete(Tweet tweet) {
-
+        likeDao.deleteAllByTweetId(tweet.getId());
+        retweetDao.deleteAllByTweetId(tweet.getId());
+        tweetDao.delete(tweet);
     }
 
     @Override
     public void deleteLike(UUID userId, UUID tweetId) {
-
+        likeDao.delete(userId, tweetId);
     }
 
     @Override
     public void deleteRetweet(UUID userId, UUID tweetId) {
-
+        retweetDao.delete(userId, tweetId);
     }
 
     @Override
