@@ -1,6 +1,7 @@
 package org.zyamileva.twitter.dao.Inmemory;
 
 import org.zyamileva.twitter.dao.UserDao;
+import org.zyamileva.twitter.entities.PersistentEntity;
 import org.zyamileva.twitter.entities.User;
 
 import java.util.List;
@@ -36,7 +37,6 @@ public class UserInMemoryDao implements UserDao {
         return Storage.getInstance().findAllUsers()
                 .stream()
                 .filter(user -> user.getLogin().equals(login))
-                .map(User::clone)
                 .findFirst();
     }
 
@@ -45,7 +45,6 @@ public class UserInMemoryDao implements UserDao {
         return Storage.getInstance().findAllUsers()
                 .stream()
                 .filter(user -> ids.contains(user.getId()))
-                .map(User::clone)
                 .collect(Collectors.toSet());
     }
 

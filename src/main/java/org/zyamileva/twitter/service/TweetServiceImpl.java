@@ -92,7 +92,6 @@ public class TweetServiceImpl implements TweetService {
         BiConsumer<UUID, UUID> likeConsumer = (userIdConsumer, tweetIdConsumer) -> {
             Like like = new Like(userIdConsumer, tweetIdConsumer);
             like = likeDao.save(like);
-            tweetDao.save(tweetDao.findById(tweetId).get());
         };
         return actionWithTweet(userId, tweetId, likeConsumer);
     }
@@ -102,7 +101,6 @@ public class TweetServiceImpl implements TweetService {
         BiConsumer<UUID, UUID> retweetConsumer = (userIdConsumer, tweetIdConsumer) -> {
             Retweet retweet = new Retweet(userIdConsumer, tweetIdConsumer);
             retweet = retweetDao.save(retweet);
-            tweetDao.save(tweetDao.findById(tweetId).get());
         };
         return actionWithTweet(userId, tweetId, retweetConsumer);
     }
@@ -110,6 +108,33 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public List<Tweet> findAllTweet() {
         return tweetDao.findAll();
+    }
+
+    @Override
+    public void delete(Tweet tweet) {
+        likeDao.deleteAllByTweetId(tweet.getId());
+        retweetDao.deleteAllByTweetId(tweet.getId());
+        tweetDao.delete(tweet);
+    }
+
+    @Override
+    public void deleteLike(UUID userId, UUID tweetId) {
+        likeDao.delete(userId, tweetId);
+    }
+
+    @Override
+    public void deleteRetweet(UUID userId, UUID tweetId) {
+        retweetDao.delete(userId, tweetId);
+    }
+
+    @Override
+    public long countLikes(UUID tweetId) {
+        return likeDao.countLikes(tweetId);
+    }
+
+    @Override
+    public long countRetweets(UUID tweetId) {
+        return retweetDao.countRetweets(tweetId);
     }
 
     private boolean actionWithTweet(UUID userId, UUID tweetId, BiConsumer<UUID, UUID> action) {

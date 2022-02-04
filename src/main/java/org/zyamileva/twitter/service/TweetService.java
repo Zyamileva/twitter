@@ -23,4 +23,14 @@ public interface TweetService {
     boolean retweet(UUID userId, UUID tweetId);
 
     List<Tweet> findAllTweet();
+
+    void delete(Tweet tweet);
+
+    void deleteLike(UUID userId, UUID tweetId);
+
+    void deleteRetweet(UUID userId, UUID tweetId);
+
+    long countLikes(UUID tweetId);
+
+    long countRetweets(UUID tweetId);
 }

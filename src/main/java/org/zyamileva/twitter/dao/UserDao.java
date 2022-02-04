@@ -1,5 +1,6 @@
 package org.zyamileva.twitter.dao;
 
+import org.zyamileva.twitter.entities.PersistentEntity;
 import org.zyamileva.twitter.entities.User;
 
 import java.util.Optional;

@@ -2,7 +2,7 @@ package org.zyamileva.twitter.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
 
@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao = new UserInMemoryDao();
+    private final UserDao userDao = new UserJDBCDao();
     private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
     private static final int MIN_LENGTH_LOGIN = 3;
     private static final int MAX_LENGTH_LOGIN = 14;
@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
         }
         log.error(validationErrors);
         return Optional.empty();
-
     }
 
     static boolean validateLogin(String login) {
@@ -56,8 +55,9 @@ public class UserServiceImpl implements UserService {
 
     private Set<String> validateUser(User user) {
         Set<String> validationErrors = new HashSet<>();
-        if (userDao.findByLogin(user.getLogin()).isPresent()) {
-            validationErrors.add("Such user exists");
+        if (user == null) {
+            validationErrors.add("User can't be null");
+            return validationErrors;
         }
         if (user.getLogin().isEmpty() || user.getLogin().isBlank()) {
             validationErrors.add("Login must not be empty or blank");
@@ -72,6 +72,24 @@ public class UserServiceImpl implements UserService {
         if (!validateUserName(user.getUsername())) {
             validationErrors.add("The username can contain letters, numbers, a space character and be at " +
                     "least 2 characters and no more than 20 characters");
+        }
+        if (validationErrors.isEmpty()) {
+            validationErrors.addAll(validateIfLoginAvailable(user));
+        }
+        return validationErrors;
+    }
+
+    private Set<String> validateIfLoginAvailable(User user) {
+        Set<String> validationErrors = new HashSet<>();
+        if (user.getId() == null) {
+            userDao.findByLogin(user.getLogin()).ifPresent(existedUser
+                    -> validationErrors.add("This login: " + user.getLogin() + " is already taken"));
+        } else {
+            User existingUser = userDao.findById(user.getId()).orElseThrow();
+            if (!existingUser.getLogin().equals(user.getLogin())) {
+                userDao.findByLogin(user.getLogin()).ifPresent(existedUser ->
+                        validationErrors.add("This login: " + user.getLogin() + " is already taken"));
+            }
         }
         return validationErrors;
     }
@@ -140,9 +158,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        if (validateLogin(login)) {
-            return userDao.findByLogin(login);
-        }
-        return Optional.empty();
+        return userDao.findByLogin(login);
+    }
+
+    @Override
+    public void delete(User user) {
+        userDao.delete(user);
     }
 }

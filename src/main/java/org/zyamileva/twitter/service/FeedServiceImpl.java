@@ -26,8 +26,8 @@ public class FeedServiceImpl implements FeedService {
                         authorIdToAuthor.get(tweet.getUserId()).getLogin(),
                         tweet.getDataPosted(),
                         tweet.getContent(),
-                        0,
-                        0
+                        tweetService.countLikes(tweet.getId()),
+                        tweetService.countRetweets(tweet.getId())
                 ))
                 .collect(Collectors.toCollection(TreeSet::new));
     }

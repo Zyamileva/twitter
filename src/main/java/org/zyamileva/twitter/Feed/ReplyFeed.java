@@ -4,6 +4,8 @@ import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.model.TweetProjection;
+import org.zyamileva.twitter.service.TweetService;
+import org.zyamileva.twitter.service.TweetServiceImpl;
 import org.zyamileva.twitter.service.UserService;
 import org.zyamileva.twitter.service.UserServiceImpl;
 
@@ -12,6 +14,7 @@ import java.util.TreeSet;
 
 public class ReplyFeed extends Feed {
     private final UserService userService = new UserServiceImpl();
+    private final TweetService tweetService = new TweetServiceImpl();
 
     private Tweet tweet;
 
@@ -41,8 +44,8 @@ public class ReplyFeed extends Feed {
                         userService.findById(tweet.getUserId()).get().getLogin(),
                         tweet.getDataPosted(),
                         tweet.getContent(),
-                        0,
-                        0
+                        tweetService.countLikes(tweet.getId()),
+                        tweetService.countRetweets(tweet.getId())
                 ))
                 .append(NEW_LINE);
 
