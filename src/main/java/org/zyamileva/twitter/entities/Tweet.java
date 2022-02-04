@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Tweet extends PersistentEntity implements Cloneable {
     private UUID userId;
     private UUID replyTweetId;
-    private LocalDateTime dataPosted;
+    private LocalDateTime datePosted;
     private String content;
     private Set<UUID> mentionedUserIds;
 
@@ -38,12 +38,12 @@ public class Tweet extends PersistentEntity implements Cloneable {
         this.replyTweetId = replyTweetId;
     }
 
-    public LocalDateTime getDataPosted() {
-        return dataPosted;
+    public LocalDateTime getDatePosted() {
+        return datePosted;
     }
 
-    public void setDataPosted(LocalDateTime dataPosted) {
-        this.dataPosted = dataPosted;
+    public void setDatePosted(LocalDateTime dataPosted) {
+        this.datePosted = dataPosted;
     }
 
     public String getContent() {
@@ -72,7 +72,7 @@ public class Tweet extends PersistentEntity implements Cloneable {
 
         if (!userId.equals(tweet.userId)) return false;
         if (!Objects.equals(replyTweetId, tweet.replyTweetId)) return false;
-        if (!dataPosted.equals(tweet.dataPosted)) return false;
+        if (!datePosted.equals(tweet.datePosted)) return false;
         if (!content.equals(tweet.content)) return false;
         return mentionedUserIds.equals(tweet.mentionedUserIds);
     }
@@ -82,7 +82,7 @@ public class Tweet extends PersistentEntity implements Cloneable {
         int result = super.hashCode();
         result = 31 * result + userId.hashCode();
         result = 31 * result + (replyTweetId != null ? replyTweetId.hashCode() : 0);
-        result = 31 * result + dataPosted.hashCode();
+        result = 31 * result + datePosted.hashCode();
         result = 31 * result + content.hashCode();
         result = 31 * result + mentionedUserIds.hashCode();
         return result;
@@ -94,7 +94,7 @@ public class Tweet extends PersistentEntity implements Cloneable {
                 "id=" + id +
                 ", userId=" + userId +
                 ", replyTweetId=" + replyTweetId +
-                ", dataPosted=" + dataPosted +
+                ", datePosted=" + datePosted +
                 ", content='" + content + '\'' +
                 ", mentionedUserIds=" + mentionedUserIds +
                 '}';
@@ -107,7 +107,7 @@ public class Tweet extends PersistentEntity implements Cloneable {
             clone.id = this.id;
             clone.userId = this.userId;
             clone.replyTweetId = this.replyTweetId;
-            clone.dataPosted = this.dataPosted;
+            clone.datePosted = this.datePosted;
             clone.content = this.content;
             clone.mentionedUserIds = this.mentionedUserIds;
             return clone;

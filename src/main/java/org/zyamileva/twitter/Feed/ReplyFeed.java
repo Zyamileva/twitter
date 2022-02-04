@@ -42,7 +42,7 @@ public class ReplyFeed extends Feed {
                 .append(new TweetProjection(
                         userService.findById(tweet.getUserId()).get().getUsername(),
                         userService.findById(tweet.getUserId()).get().getLogin(),
-                        tweet.getDataPosted(),
+                        tweet.getDatePosted(),
                         tweet.getContent(),
                         tweetService.countLikes(tweet.getId()),
                         tweetService.countRetweets(tweet.getId())

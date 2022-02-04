@@ -42,6 +42,22 @@ public class TweetServiceImpl implements TweetService {
 
     private Set<String> validateTweet(Tweet tweet) {
         Set<String> errors = new HashSet<>();
+        if (tweet == null) {
+            errors.add("Tweet can't be null");
+            return errors;
+        }
+        if (!userService.existById((tweet.getUserId()))) {
+            errors.add("User not exists for tweet");
+        }
+        if (tweet.getReplyTweetId() != null) {
+            if (tweet.getReplyTweetId().equals(tweet.getId())) {
+                errors.add("Reply tweet id can't be the same with this tweet id");
+            }
+        }
+        if (!tweetDao.findById(tweet.getReplyTweetId()).isPresent()) {
+            errors.add("Reply tweet id not exists for tweet");
+        }
+
         if (tweet.getContent().isBlank() || tweet.getContent().isEmpty()) {
             errors.add("Tweet content can't be blank or empty");
         }
@@ -74,7 +90,7 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public Set<Tweet> findFollowingTweets(Set<UUID> userIds) {
-        return tweetDao.findFollowingTweets(userIds);
+        return userIds.isEmpty() ? Collections.emptySet() : tweetDao.findFollowingTweets(userIds);
     }
 
     @Override
@@ -112,9 +128,11 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public void delete(Tweet tweet) {
-        likeDao.deleteAllByTweetId(tweet.getId());
-        retweetDao.deleteAllByTweetId(tweet.getId());
-        tweetDao.delete(tweet);
+        if (tweet != null) {
+            likeDao.deleteAllByTweetId(tweet.getId());
+            retweetDao.deleteAllByTweetId(tweet.getId());
+            tweetDao.delete(tweet);
+        }
     }
 
     @Override

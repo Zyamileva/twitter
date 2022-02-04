@@ -68,7 +68,7 @@ class Storage {
         Tweet clone = entity.clone();
         if (clone.getId() == null) {
             clone.setId(UUID.randomUUID());
-            clone.setDataPosted(LocalDateTime.now());
+            clone.setDatePosted(LocalDateTime.now());
         }
         TWEETS.put(clone.getId(), clone);
         return getByTweetId(clone.getId());

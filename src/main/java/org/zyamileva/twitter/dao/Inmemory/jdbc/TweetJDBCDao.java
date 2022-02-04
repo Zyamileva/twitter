@@ -23,19 +23,18 @@ public class TweetJDBCDao implements TweetDao {
     @Override
     public Tweet save(Tweet entity) {
         final String createTweetQuery = """
-                insert into users(id, user_id, reply_tweet_id, date_posted, content, mentioned_user_ids)
+                insert into tweets(id, user_id, reply_tweet_id, date_posted, content, mentioned_user_ids)
                                values (?, ?, ?, ?, ?, ?)
                 """;
-        try {
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             Tweet savedTweet = entity.clone();
             savedTweet.setId(UUID.randomUUID());
-            savedTweet.setDataPosted(LocalDateTime.now());
-            Connection connection = DriverManager.getConnection(H2_URL);
+            savedTweet.setDatePosted(LocalDateTime.now());
             PreparedStatement pr = connection.prepareStatement(createTweetQuery);
             pr.setObject(1, savedTweet.getId());
             pr.setObject(2, savedTweet.getUserId());
             pr.setObject(3, savedTweet.getReplyTweetId());
-            pr.setTimestamp(4, Timestamp.valueOf(savedTweet.getDataPosted()));
+            pr.setTimestamp(4, Timestamp.valueOf(savedTweet.getDatePosted()));
             pr.setObject(5, savedTweet.getContent());
             pr.setArray(6, connection.createArrayOf(UUID_TYPE, savedTweet.getMentionedUserIds().toArray()));
             pr.execute();
@@ -55,8 +54,7 @@ public class TweetJDBCDao implements TweetDao {
                 from tweets
                 where id = ?
                  """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(findByIdQuery);
             ps.setObject(1, id);
             ResultSet resultSet = ps.executeQuery();
@@ -77,8 +75,7 @@ public class TweetJDBCDao implements TweetDao {
                 from tweets
                  """;
         List<Tweet> tweets = new ArrayList<>();
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(findALLTweetsQuery);
             while (resultSet.next()) {
@@ -98,8 +95,7 @@ public class TweetJDBCDao implements TweetDao {
                 delete from tweets
                 where id = ?
                 """;
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(deleteQuery);
             ps.setObject(1, entity.getId());
             ps.execute();
@@ -119,8 +115,7 @@ public class TweetJDBCDao implements TweetDao {
                 """;
         Set<Tweet> tweets = new HashSet<>();
 
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             String inClause = userIds.stream()
                     .map(Object::toString)
                     .collect(Collectors.joining("', '", "'", "'"));
@@ -145,8 +140,7 @@ public class TweetJDBCDao implements TweetDao {
                 where user_id = ?
                  """;
         Set<Tweet> tweets = new HashSet<>();
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(findTweetsByUserIdQuery);
             ps.setObject(1, userId);
             ResultSet resultSet = ps.executeQuery();
@@ -169,8 +163,7 @@ public class TweetJDBCDao implements TweetDao {
                 where user_id = ?
                  """;
         Set<Tweet> tweets = new HashSet<>();
-        try {
-            Connection connection = DriverManager.getConnection(H2_URL);
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
             PreparedStatement ps = connection.prepareStatement(findRetweetsByUserIdQuery);
             ps.setObject(1, userId);
             ResultSet resultSet = ps.executeQuery();

@@ -13,7 +13,7 @@ public class TweetResultSetMapper implements ResultSetMapper<Tweet> {
         tweet.setId(id(resultSet));
         tweet.setUserId(uuid(resultSet,"user_id"));
         tweet.setReplyTweetId(uuidNullable(resultSet, "reply_tweet_id"));
-        tweet.setDataPosted(localDateTime(resultSet,"date_posted"));
+        tweet.setDatePosted(localDateTime(resultSet,"date_posted"));
         tweet.setContent(resultSet.getString("content"));
         tweet.setMentionedUserIds(uuids(resultSet, "mentioned_user_ids"));
         return null;

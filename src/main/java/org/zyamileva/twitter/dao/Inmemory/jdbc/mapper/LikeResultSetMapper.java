@@ -9,11 +9,9 @@ public class LikeResultSetMapper implements ResultSetMapper<Like>{
 
     @Override
     public Like map(ResultSet resultSet) throws SQLException {
-      //  Like like = new Like();
-       // like.setId(id(resultSet));
-        //like.setUserId() = ;
-
-
-        return null;
+       Like like = new Like(uuid(resultSet, "user_id"), uuid(resultSet, "tweet_id"));
+        like.setId(id(resultSet));
+        like.setDatePosted(localDateTime(resultSet, "data_posted"));
+        return like;
     }
 }

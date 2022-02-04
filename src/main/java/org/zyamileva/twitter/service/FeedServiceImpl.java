@@ -24,7 +24,7 @@ public class FeedServiceImpl implements FeedService {
                 .map(tweet -> new TweetProjection(
                         authorIdToAuthor.get(tweet.getUserId()).getUsername(),
                         authorIdToAuthor.get(tweet.getUserId()).getLogin(),
-                        tweet.getDataPosted(),
+                        tweet.getDatePosted(),
                         tweet.getContent(),
                         tweetService.countLikes(tweet.getId()),
                         tweetService.countRetweets(tweet.getId())
