@@ -55,8 +55,7 @@ public class UserJDBCDao implements UserDao {
             connection.commit();
 
             return entity;
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during user creation");
             return null;
@@ -109,8 +108,7 @@ public class UserJDBCDao implements UserDao {
             if (resultSet.next()) {
                 return Optional.of(userResultSetMapper.map(resultSet));
             }
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during find user by id " + id);
         }
@@ -130,8 +128,7 @@ public class UserJDBCDao implements UserDao {
             while (resultSet.next()) {
                 users.add(userResultSetMapper.map(resultSet));
             }
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during find all users");
         }
@@ -149,8 +146,7 @@ public class UserJDBCDao implements UserDao {
             ps.setObject(1, entity.getId());
             ps.execute();
             connection.commit();
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during delete user " + entity);
         }
@@ -171,8 +167,7 @@ public class UserJDBCDao implements UserDao {
             if (resultSet.next()) {
                 return Optional.of(userResultSetMapper.map(resultSet));
             }
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during find user by login " + login);
         }
@@ -198,8 +193,7 @@ public class UserJDBCDao implements UserDao {
             while (resultSet.next()) {
                 users.add(userResultSetMapper.map(resultSet));
             }
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during fetching users");
         }
@@ -220,8 +214,7 @@ public class UserJDBCDao implements UserDao {
             if (resultSet.next()) {
                 return true;
             }
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during existsById id " + id);
         }
