@@ -3,56 +3,53 @@ package org.zyamileva.twitter.dao.Inmemory.jdbc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.LikeResultSetMapper;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.TweetResultSetMapper;
-import org.zyamileva.twitter.dao.LikeDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.ResultSetMapper;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.RetweetResultSetMapper;
+import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.entities.Like;
-import org.zyamileva.twitter.entities.Tweet;
+import org.zyamileva.twitter.entities.Retweet;
 import org.zyamileva.twitter.service.TweetService;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
-import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.UUID_TYPE;
 
-public class LikeJDBCDao implements LikeDao {
+public class RetweetJDBCDao implements RetweetDao {
     private static final Logger log = LogManager.getLogger(TweetService.class);
-    private static final LikeResultSetMapper likeResultSetMapper = new LikeResultSetMapper();
+    private static final RetweetResultSetMapper retweetResultSetMapper = new RetweetResultSetMapper();
 
     @Override
-    public Like save(Like entity) {
-        final String createLikeQuery = """
-                insert into likes(id, user_id, tweet_id, date_posted)
+    public Retweet save(Retweet entity) {
+        final String createRetweetQuery = """
+                insert into retweets(id, user_id, tweet_id, date_posted)
                                values (?, ?, ?, ?)
                 """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
-            Like savedLike = entity.clone();
-            savedLike.setId(UUID.randomUUID());
-            savedLike.setDatePosted(LocalDateTime.now());
-            PreparedStatement pr = connection.prepareStatement(createLikeQuery);
-            pr.setObject(1, savedLike.getId());
-            pr.setObject(2, savedLike.getUserId());
-            pr.setObject(3, savedLike.getTweetId());
-            pr.setTimestamp(4, Timestamp.valueOf(savedLike.getDatePosted()));
+            Retweet savedRetweet = entity.clone();
+            savedRetweet.setId(UUID.randomUUID());
+            savedRetweet.setDatePosted(LocalDateTime.now());
+            PreparedStatement pr = connection.prepareStatement(createRetweetQuery);
+            pr.setObject(1, savedRetweet.getId());
+            pr.setObject(2, savedRetweet.getUserId());
+            pr.setObject(3, savedRetweet.getTweetId());
+            pr.setTimestamp(4, Timestamp.valueOf(savedRetweet.getDatePosted()));
             pr.execute();
             connection.commit();
-            return savedLike;
+            return savedRetweet;
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Like update error");
+            log.error("Retweet update error");
             return null;
         }
     }
 
     @Override
-    public Optional<Like> findById(UUID id) {
+    public Optional<Retweet> findById(UUID id) {
         final String findByIdQuery = """
                 select *
-                from likes
+                from retweet
                 where id = ?
                  """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
@@ -60,39 +57,39 @@ public class LikeJDBCDao implements LikeDao {
             ps.setObject(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(likeResultSetMapper.map(resultSet));
+                return Optional.of(retweetResultSetMapper.map(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during find like by id " + id);
+            log.error("Error during find retweet by id " + id);
         }
         return Optional.empty();
     }
 
     @Override
     public List findAll() {
-        final String findAllLikesQuery = """
+        final String findAllRetweetsQuery = """
                 select *
-                from likes
+                from retweets
                  """;
-        List<Like> likes = new ArrayList<>();
+        List<Retweet> retweets = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(findAllLikesQuery);
+            ResultSet resultSet = statement.executeQuery(findAllRetweetsQuery);
             while (resultSet.next()) {
-                likes.add(likeResultSetMapper.map(resultSet));
+                retweets.add(retweetResultSetMapper.map(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during find all likes");
+            log.error("Error during find all retweets");
         }
-        return likes;
+        return retweets;
     }
 
     @Override
-    public void delete(Like entity) {
+    public void delete(Retweet entity) {
         final String deleteQuery = """
-                delete from likes
+                delete from retweets
                 where id = ?
                 """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
@@ -102,27 +99,49 @@ public class LikeJDBCDao implements LikeDao {
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during delete like " + entity);
+            log.error("Error during delete retweet " + entity);
         }
     }
 
     @Override
-    public long countLikes(UUID tweetId) {
-        final String countLikesQuery = """
-                select count(id) as number_of_likes
-                from likes
-                where tweet_id = ?
-                """;
+    public Set<Retweet> findRetweetsByUserId(UUID userId) {
+        Set<Retweet> retweets = new HashSet<>();
+        final String findRetweetsByUserIdQuery = """
+                select *
+                from retweet
+                where user_id = ?
+                 """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
-            PreparedStatement ps = connection.prepareStatement(countLikesQuery);
-            ps.setObject(1, tweetId);
+            PreparedStatement ps = connection.prepareStatement(findRetweetsByUserIdQuery);
+            ps.setObject(1, userId);
             ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getLong("number_of_likes");
+            while (resultSet.next()) {
+                retweets.add(retweetResultSetMapper.map(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during count likes for tweet: " + tweetId);
+            log.error("Error during find retweets by userId " + userId);
+        }
+        return retweets;
+    }
+
+    @Override
+    public long countRetweets(UUID tweetId) {
+        final String countRetweetsQuery = """
+                select count(id) as number_of_retweets
+                from retweets
+                where tweet_id = ?
+                """;
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
+            PreparedStatement ps = connection.prepareStatement(countRetweetsQuery);
+            ps.setObject(1, tweetId);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getLong("number_of_retweets");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error("Error during count retweets for tweet: " + tweetId);
         }
         return 0;
     }
@@ -130,7 +149,7 @@ public class LikeJDBCDao implements LikeDao {
     @Override
     public void delete(UUID userId, UUID tweetId) {
         final String deleteQuery = """
-                delete from likes
+                delete from retweets
                 where user_id = ? and tweet_id = ?
                 """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
@@ -141,14 +160,14 @@ public class LikeJDBCDao implements LikeDao {
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during delete like for tweet: " + tweetId + " , user: " + userId);
+            log.error("Error during delete retweet for tweet: " + tweetId + " , user: " + userId);
         }
     }
 
     @Override
     public void deleteAllByTweetId(UUID tweetId) {
         final String deleteAllByTweetIdQuery = """
-                delete from likes
+                delete from retweets
                 where tweet_id = ?
                 """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
@@ -158,19 +177,19 @@ public class LikeJDBCDao implements LikeDao {
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during delete likes for tweet: " + tweetId);
+            log.error("Error during delete retweets for tweet: " + tweetId);
         }
     }
 
     @Override
-    public boolean likeExists(UUID userId, UUID tweetId) {
-        final String likeExists = """
+    public boolean retweetExists(UUID userId, UUID tweetId) {
+        final String retweetsExists = """
                 select *
-                from likes
+                from retweets
                 where user_id = ? and tweet_id = ?
                 """;
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
-            PreparedStatement ps = connection.prepareStatement(likeExists);
+            PreparedStatement ps = connection.prepareStatement(retweetsExists);
             ps.setObject(1, userId);
             ps.setObject(2, tweetId);
             ResultSet resultSet = ps.executeQuery();
@@ -179,7 +198,7 @@ public class LikeJDBCDao implements LikeDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during likeExists userId " + userId + " tweetId " + tweetId);
+            log.error("Error during retweetsExists userId " + userId + " tweetId " + tweetId);
         }
         return false;
     }

@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.zyamileva.twitter.Feed.HomeFeed;
 import org.zyamileva.twitter.Feed.ReplyFeed;
 import org.zyamileva.twitter.Feed.UserFeed;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.LikeJDBCDao;
 import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
 import org.zyamileva.twitter.entities.Like;
 import org.zyamileva.twitter.entities.Retweet;
@@ -23,78 +24,90 @@ public class Twitter {
     private static final TweetService tweetService = new TweetServiceImpl();
     private static final FeedService feedService = new FeedServiceImpl();
     private static final UserJDBCDao userJDBCDao = new UserJDBCDao();
+    private static final LikeJDBCDao likeJDBCDao = new LikeJDBCDao();
 
     public static void main(String[] args) {
-        User kate = userService.findByLogin("@kate").orElseThrow();
-        //User nikita = new User("Nikita Ivanov", "@nikita_ivanov");
-
-        // userService.saveUser(nikita);
-
-        //User nikita = userService.findByLogin("@nikita_ivanov").orElseThrow();
-        //userService.saveUser(kate);
-
-        //kate.setLocation("Odessa");
-        //userService.saveUser(kate);
-        //System.out.println(userService.findById(kate.getId()).orElseThrow());
-
-        //  userService.delete(nikita);
-
-        //  userJDBCDao.findAll().forEach(user -> System.out.println(user));
-
-        Set<UUID> userSet = new HashSet<>();
-        userSet.add(UUID.fromString("e0988b42-6b87-42ff-ab63-61ad5b621f8d"));
-        userSet.add(UUID.fromString("03dccf47-6d9b-4835-847b-fcd4dff93c8e"));
-        System.out.println(userService.findByIds(userSet));
-
-        System.out.println(userService.existById(UUID.fromString("03dccf47-6d9b-4835-847b-fcd4dff93c8e")));
-
 //        User kate = new User("Kate Zyamileva", "@kate_zyam");
 //        User anna = new User("Anna Zyamileva", "@___j");
 //        User nikita = new User("Nikita Ivanov", "@nikita_ivanov");
-//
+
 //        kate.setOfficialAccount(true);
 //        anna.setOfficialAccount(true);
 //        nikita.setOfficialAccount(true);
-//
+
+        System.out.println(feedService.buildHomeFeed(userService.findByLogin("@nikita_ivanov").orElseThrow().getId()));
+        System.out.println(feedService.buildUserFeed(userService.findByLogin("@anna").orElseThrow().getId()));
+        System.out.println(feedService.buildReplyFeed(UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db")));
+
+//        nikita = userService.saveUser(nikita).orElseThrow();
+
+        User kate = userService.findByLogin("@kate").orElseThrow();
+        User anna = userService.findByLogin("@anna").orElseThrow();
+        User nikita = userService.findByLogin("@nikita_ivanov").orElseThrow();
+        //  tweetService.retweet(userService.findByLogin("@anna").orElseThrow().getId(), UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
+
+//        Tweet tweetKate = new Tweet(kate.getId(), "Hello!");
+//        tweetKate = tweetService.saveTweet(tweetKate).orElseThrow();
+
+//        Tweet tweetAnna = new Tweet(anna.getId(), "Hello @nikita_ivanov !");
+//        tweetAnna = tweetService.saveTweet(tweetAnna).orElseThrow();
+//        Tweet tweetNikita = new Tweet(nikita.getId(), "Hello my friends");
+//        tweetNikita = tweetService.saveTweet(tweetNikita).orElseThrow();
+//         Set <UUID> followingKate = new HashSet<>();
+//         followingKate.add(nikita.getId());
+//         followingKate.add(anna.getId());
+//         kate.setFollowingIds(followingKate);
 //        kate = userService.saveUser(kate).orElseThrow();
-//        anna = userService.saveUser(anna).orElseThrow();
+//
+//        Set<UUID> followingNikita = new HashSet<>();
+//        followingNikita.add(anna.getId());
+//        nikita.setFollowingIds(followingNikita);
 //        nikita = userService.saveUser(nikita).orElseThrow();
 //
-//        log.info(kate);
-//
-//        User ann = new User("Anna Zyamikleva", "@___j");
-//        //  ann = userService.saveUser(ann).orElseThrow();
-//
-       // Tweet tweetAnna = new Tweet(anna.getId(), "Hello @nikita_ivanov !");
-        Tweet tweetKate = new Tweet(kate.getId(), "Hello!");
-        //Tweet tweetNikita = new Tweet(nikita.getId(), "Hello my friends");
-        tweetKate = tweetService.saveTweet(tweetKate).orElseThrow();
-       // tweetAnna = tweetService.saveTweet(tweetAnna).orElseThrow();
-        //tweetNikita = tweetService.saveTweet(tweetNikita).orElseThrow();
+//        Set<UUID> followerNikita = new HashSet<>();
+//        followerNikita.add(kate.getId());
+//        nikita.setFollowerIds(followerNikita);
+//        nikita = userService.saveUser(nikita).orElseThrow();
 
-        //tweetService.retweet(kate.getId(), tweetAnna.getId());
-        tweetService.like(kate.getId(), tweetKate.getId());
+//        Set<UUID> followerAnna = new HashSet<>();
+//        followerAnna.add(nikita.getId());
+//        anna.setFollowerIds(followerAnna);
+//        anna = userService.saveUser(anna).orElseThrow();
+//
+//        Set<UUID> follower = new HashSet<>();
+//        follower.add(kate.getId());
+//        follower.add(nikita.getId());
+//
+//        anna.setFollowerIds(follower);
+//        anna = userService.saveUser(anna).orElseThrow();
 
-        UserFeed userFeed = feedService.buildUserFeed(kate.getId());
-        System.out.println((userFeed));
+//        tweetService.like(kate.getId(),UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
 //
-//        userService.subscribe(nikita.getId(), anna.getId());
-//        userService.subscribe(nikita.getId(), kate.getId());
-//
-//        HomeFeed homeFeed = feedService.buildHomeFeed(nikita.getId());
-//        log.info(homeFeed);
-//
-//        Tweet tweetAnnaForNikita = new Tweet(anna.getId(), "Good");
-//        Tweet tweetKateForNikite = new Tweet(kate.getId(), "Grest!");
+//        Tweet tweetAnnaForNikita = new Tweet(anna.getId(), "Hello, Nikita @nikita_ivanov");
 //        tweetAnnaForNikita = tweetService.saveTweet(tweetAnnaForNikita).orElseThrow();
-//        tweetKateForNikite = tweetService.saveTweet(tweetKateForNikite).orElseThrow();
+//        tweetService.saveTweet(annaTweet);
 //
-//        tweetAnnaForNikita.setReplyTweetId(tweetNikita.getId());
-//        tweetKateForNikite.setReplyTweetId(tweetNikita.getId());
+//        tweetService.delete(tweetService.findById(UUID.fromString("bd635dab-dcdf-4bec-a1b7-bd30f4ce4e92")).orElseThrow());
+//        User t = userService.findById(UUID.fromString("03dccf47-6d9b-4835-847b-fcd4dff93c8e")).orElseThrow();
+//        Set<UUID> userSet = new HashSet<>();
+//        userSet.add(t.getId());
+//        System.out.println(tweetService.findFollowingTweets(userSet));
+
+//        System.out.println(tweetService.findTweetsByUserId(t.getId()));
+        //(UUID.fromString("7c76d022-0836-4944-8316-dfc6d239d708")));
+
+//       System.out.println( tweetService.countLikes(UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db")));
+
+//        tweetService.like(anna.getId(),UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
+
+//        tweetService.deleteLike(anna.getId(),UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
+
+//        Tweet tweetAnnaForNikita = new Tweet(anna.getId(), "Hello, Nikita @nikita_ivanov");
 //        tweetAnnaForNikita = tweetService.saveTweet(tweetAnnaForNikita).orElseThrow();
-//        tweetKateForNikite = tweetService.saveTweet(tweetKateForNikite).orElseThrow();
-//
-//        ReplyFeed replayFeed = feedService.buildReplyFeed(tweetNikita.getId());
-//        System.out.println((replayFeed));
+//        tweetService.like(UUID.fromString("03dccf47-6d9b-4835-847b-fcd4dff93c8e"), UUID.fromString("365814ca-3f03-4520-9341-c916666444a2"));
+//        likeJDBCDao.deleteAllByTweetId(UUID.fromString("365814ca-3f03-4520-9341-c916666444a2"));
+//        System.out.println( likeJDBCDao.findById(UUID.fromString("ccb4fc2a-0974-4212-9e30-65aa6e4848ce")));
+
     }
+
 }

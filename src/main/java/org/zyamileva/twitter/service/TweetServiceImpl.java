@@ -6,6 +6,10 @@ import org.zyamileva.twitter.dao.Inmemory.LikeInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.RetweetInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.TweetInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.LikeJDBCDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.RetweetJDBCDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.TweetJDBCDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.dao.TweetDao;
@@ -22,10 +26,10 @@ import java.util.regex.Pattern;
 
 public class TweetServiceImpl implements TweetService {
     private static final Logger log = LogManager.getLogger(TweetService.class);
-    private final TweetDao tweetDao = new TweetInMemoryDao();
-    private final UserDao userDao = new UserInMemoryDao();
-    private final RetweetDao retweetDao = new RetweetInMemoryDao();
-    private final LikeDao likeDao = new LikeInMemoryDao();
+    private final TweetDao tweetDao = new TweetJDBCDao();
+    private final UserDao userDao = new UserJDBCDao();
+    private final RetweetDao retweetDao = new RetweetJDBCDao();
+    private final LikeDao likeDao = new LikeJDBCDao();
     private final UserService userService = new UserServiceImpl();
     private static final int MAX_LENGTH = 140;
 
@@ -54,7 +58,7 @@ public class TweetServiceImpl implements TweetService {
                 errors.add("Reply tweet id can't be the same with this tweet id");
             }
         }
-        if (!tweetDao.findById(tweet.getReplyTweetId()).isPresent()) {
+        if (tweet.getReplyTweetId() != null &&!tweetDao.findById(tweet.getReplyTweetId()).isPresent()) {
             errors.add("Reply tweet id not exists for tweet");
         }
 

@@ -12,11 +12,14 @@ import org.zyamileva.twitter.service.UserServiceImpl;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static org.zyamileva.twitter.utils.StringUtils.NEW_LINE;
+import static org.zyamileva.twitter.utils.StringUtils.SEPARATOR;
+
 public class ReplyFeed extends Feed {
     private final UserService userService = new UserServiceImpl();
     private final TweetService tweetService = new TweetServiceImpl();
 
-    private Tweet tweet;
+    private final Tweet tweet;
 
     public ReplyFeed(Tweet tweet, TreeSet<TweetProjection> tweetProjections) {
         super(tweetProjections);

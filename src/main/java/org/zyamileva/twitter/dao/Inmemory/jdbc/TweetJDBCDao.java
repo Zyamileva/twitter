@@ -160,7 +160,7 @@ public class TweetJDBCDao implements TweetDao {
                 select *
                 from tweets a
                 join retweets b on a.id = b.tweet_id
-                where user_id = ?
+                where b.user_id = ?
                  """;
         Set<Tweet> tweets = new HashSet<>();
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
