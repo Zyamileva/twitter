@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.Feed.HomeFeed;
 import org.zyamileva.twitter.Feed.ReplyFeed;
 import org.zyamileva.twitter.Feed.UserFeed;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.RetweetJDBCDao;
+import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.entities.PersistentEntity;
 import org.zyamileva.twitter.entities.Tweet;
@@ -16,10 +16,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FeedServiceImpl implements FeedService {
-    private final UserService userService = new UserServiceImpl();
-    private final TweetService tweetService = new TweetServiceImpl();
-    private final RetweetDao retweetDao = new RetweetJDBCDao();
-    private static final Logger log = LogManager.getLogger(TweetService.class);
+    private final UserService userService = Context.getInstance().getUserService();
+    private final TweetService tweetService = Context.getInstance().getTweetService();
+    private final RetweetDao retweetDao = Context.getInstance().getRetweetDao();
+    private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
 
     private TreeSet<TweetProjection> getTweetProjections(Set<Tweet> tweets, Map<UUID, User> authorIdToAuthor) {
         return tweets

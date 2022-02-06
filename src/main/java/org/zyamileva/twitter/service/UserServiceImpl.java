@@ -2,19 +2,17 @@ package org.zyamileva.twitter.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
+import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao = new UserJDBCDao();
+    private final UserDao userDao = Context.getInstance().getUserDao();
     private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
     private static final int MIN_LENGTH_LOGIN = 3;
     private static final int MAX_LENGTH_LOGIN = 14;

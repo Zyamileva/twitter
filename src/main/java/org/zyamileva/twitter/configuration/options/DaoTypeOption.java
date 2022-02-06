@@ -1,7 +1,7 @@
 package org.zyamileva.twitter.configuration.options;
 
 public enum DaoTypeOption {
-    IN_MEMORY("inem"),JDBC("jdbc");
+    IN_MEMORY("inmem"), JDBC("jdbc");
 
     public static final String DAO_TYPE_OPTION_SHORT = "dt";
     public static final String DAO_TYPE_OPTION_LONG = "daoType";
