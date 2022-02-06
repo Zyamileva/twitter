@@ -48,7 +48,6 @@ public class Twitter {
 
 //        Tweet tweetKate = new Tweet(kate.getId(), "Hello!");
 //        tweetKate = tweetService.saveTweet(tweetKate).orElseThrow();
-
 //        Tweet tweetAnna = new Tweet(anna.getId(), "Hello @nikita_ivanov !");
 //        tweetAnna = tweetService.saveTweet(tweetAnna).orElseThrow();
 //        Tweet tweetNikita = new Tweet(nikita.getId(), "Hello my friends");
@@ -58,7 +57,6 @@ public class Twitter {
 //         followingKate.add(anna.getId());
 //         kate.setFollowingIds(followingKate);
 //        kate = userService.saveUser(kate).orElseThrow();
-//
 //        Set<UUID> followingNikita = new HashSet<>();
 //        followingNikita.add(anna.getId());
 //        nikita.setFollowingIds(followingNikita);
