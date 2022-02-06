@@ -2,13 +2,9 @@ package org.zyamileva.twitter.dao.Inmemory.jdbc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.LikeResultSetMapper;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.ResultSetMapper;
 import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.RetweetResultSetMapper;
 import org.zyamileva.twitter.dao.RetweetDao;
-import org.zyamileva.twitter.entities.Like;
 import org.zyamileva.twitter.entities.Retweet;
-import org.zyamileva.twitter.service.TweetService;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -17,7 +13,7 @@ import java.util.*;
 import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
 
 public class RetweetJDBCDao implements RetweetDao {
-    private static final Logger log = LogManager.getLogger(TweetService.class);
+    private static final Logger log = LogManager.getLogger(RetweetJDBCDao.class);
     private static final RetweetResultSetMapper retweetResultSetMapper = new RetweetResultSetMapper();
 
     @Override

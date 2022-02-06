@@ -44,7 +44,7 @@ public class Twitter {
         User kate = userService.findByLogin("@kate").orElseThrow();
         User anna = userService.findByLogin("@anna").orElseThrow();
         User nikita = userService.findByLogin("@nikita_ivanov").orElseThrow();
-        //  tweetService.retweet(userService.findByLogin("@anna").orElseThrow().getId(), UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
+//        tweetService.retweet(userService.findByLogin("@anna").orElseThrow().getId(), UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
 //        Tweet tweetKate = new Tweet(kate.getId(), "Hello!");
 //        tweetKate = tweetService.saveTweet(tweetKate).orElseThrow();
 //        Tweet tweetAnna = new Tweet(anna.getId(), "Hello @nikita_ivanov !");

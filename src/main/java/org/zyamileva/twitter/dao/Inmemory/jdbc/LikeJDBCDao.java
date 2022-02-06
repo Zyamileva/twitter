@@ -20,7 +20,7 @@ import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
 import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.UUID_TYPE;
 
 public class LikeJDBCDao implements LikeDao {
-    private static final Logger log = LogManager.getLogger(TweetService.class);
+    private static final Logger log = LogManager.getLogger(LikeJDBCDao.class);
     private static final LikeResultSetMapper likeResultSetMapper = new LikeResultSetMapper();
 
     @Override

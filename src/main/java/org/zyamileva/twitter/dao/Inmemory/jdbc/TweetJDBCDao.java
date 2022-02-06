@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.TweetResultSetMapper;
 import org.zyamileva.twitter.dao.TweetDao;
 import org.zyamileva.twitter.entities.Tweet;
-import org.zyamileva.twitter.entities.User;
-import org.zyamileva.twitter.service.TweetService;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -17,7 +15,7 @@ import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
 import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.UUID_TYPE;
 
 public class TweetJDBCDao implements TweetDao {
-    private static final Logger log = LogManager.getLogger(TweetService.class);
+    private static final Logger log = LogManager.getLogger(TweetJDBCDao.class);
     private static final TweetResultSetMapper tweetResultSetMapper = new TweetResultSetMapper();
 
     @Override
