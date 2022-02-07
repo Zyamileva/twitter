@@ -28,8 +28,6 @@ public class Context {
     private TweetService tweetService;
     private FeedService feedService;
 
-    private boolean contextInitialised = false;
-
     private Context() {
     }
 
@@ -40,6 +38,8 @@ public class Context {
     private static class ContextHolder {
         private static final Context CONTEXT = new Context();
     }
+
+    private boolean contextInitialised = false;
 
     public void initContext(Configuration configuration) {
         if (!contextInitialised) {

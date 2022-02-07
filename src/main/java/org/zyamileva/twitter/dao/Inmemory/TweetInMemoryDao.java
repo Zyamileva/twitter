@@ -1,5 +1,6 @@
 package org.zyamileva.twitter.dao.Inmemory;
 
+import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.dao.TweetDao;
 import org.zyamileva.twitter.entities.Retweet;
@@ -12,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TweetInMemoryDao implements TweetDao {
-    private final RetweetDao retweetDao = new RetweetInMemoryDao();
+    private final RetweetDao retweetDao = Context.getInstance().getRetweetDao();
 
     @Override
     public Tweet save(Tweet entity) {

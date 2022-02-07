@@ -1,7 +1,6 @@
 package org.zyamileva.twitter.dao.Inmemory;
 
 import org.zyamileva.twitter.dao.UserDao;
-import org.zyamileva.twitter.entities.PersistentEntity;
 import org.zyamileva.twitter.entities.User;
 
 import java.util.List;
