@@ -43,21 +43,50 @@ public class Migration {
             """;
     private static final String CREATE_TABLE_LIKES_QUERY = """
             create table if not exists likes(
+            id uuid primary key,
             user_id uuid not null,
             tweet_id uuid not null,
             date_posted timestamp not null,
             foreign key (user_id) references users(id),
-            foreign key (tweet_id) references tweets(id)
+            foreign key (tweet_id) references tweets(id),
+            constraint pair_like unique (user_id, tweet_id)
             );
             """;
     private static final String CREATE_TABLE_RETWEETS_QUERY = """
             create table if not exists retweets(
+            id uuid primary key,
             user_id uuid not null,
             tweet_id uuid not null,
             date_posted timestamp not null,
             foreign key (user_id) references users(id),
-            foreign key (tweet_id) references tweets(id)
+            foreign key (tweet_id) references tweets(id),
+            constraint pair_retweet unique (user_id, tweet_id)
             );          
+            """;
+    private static final String INSERT_INTO_TABLE_USERS_QUERY = """
+            insert into USERS(id, username, login, about, location, registered_since,follower_ids, following_ids, official_account)
+            values
+            ('e0988b42-6b87-42ff-ab63-61ad5b621f8d',	'Kate Zyamileva',	'@kate',	'Girl',	'Odessa', '2022-01-07 22:19:12', array[],	array['ea8649fa-4feb-46df-9289-9bd34a289687', '03dccf47-6d9b-4835-847b-fcd4dff93c8e'],	'true'),
+            ('03dccf47-6d9b-4835-847b-fcd4dff93c8e',	'Anna Zyamileva',	'@anna',	'Girl',	'DE, Delaware', '2022-01-28 22:19:12', array['e0988b42-6b87-42ff-ab63-61ad5b621f8d', 'ea8649fa-4feb-46df-9289-9bd34a289687'],	array[],	'true'),    
+            ('ea8649fa-4feb-46df-9289-9bd34a289687',	'Nikita Ivanov',	'@nikita_ivanov',	'Boy',	'DE, Delaware', '2022-02-05 22:19:12', array['e0988b42-6b87-42ff-ab63-61ad5b621f8d'],	array['03dccf47-6d9b-4835-847b-fcd4dff93c8e'],	'true')         
+            """;
+    private static final String INSERT_INTO_TABLE_TWEETS_QUERY = """
+            insert into TWEETS(id, user_id, reply_tweet_id, date_posted, content, mentioned_user_ids)
+            values 
+            ('834494ac-08dd-4601-ae6e-d195fb435378', '03dccf47-6d9b-4835-847b-fcd4dff93c8e', null, '2022-02-05 18:55:20', 'Hello @nikita_ivanov !', array['ea8649fa-4feb-46df-9289-9bd34a289687']),
+            ('a2ab06fc-b1eb-4559-8886-24a200a481dc', 'e0988b42-6b87-42ff-ab63-61ad5b621f8d', null, '2022-02-06 18:55:20', 'Hello', array[]),
+            ('abad2161-da52-443b-aa3a-33556fcd18db', 'ea8649fa-4feb-46df-9289-9bd34a289687', null, '2022-02-07 18:55:20', 'Hello my friends', array[]),
+            ('70caa93e-7a1c-43e9-ad09-10a81a20ea7c', '03dccf47-6d9b-4835-847b-fcd4dff93c8e', 'abad2161-da52-443b-aa3a-33556fcd18db' , '2022-02-08 18:55:20', 'Hello, Nikita @nikita_ivanov', array['ea8649fa-4feb-46df-9289-9bd34a289687'])
+            """;
+    private static final String INSERT_INTO_TABLE_LIKES_QUERY = """
+            insert into LIKES(id, user_id, tweet_id, date_posted)
+            values
+            ('ccb4fc2a-0974-4212-9e30-65aa6e4848ce', 'e0988b42-6b87-42ff-ab63-61ad5b621f8d', 'abad2161-da52-443b-aa3a-33556fcd18db', '2022-02-09 18:55:20')
+            """;
+    private static final String INSERT_INTO_TABLE_RETWEETS_QUERY = """
+            insert into RETWEETS(id, user_id, tweet_id, date_posted)
+            values
+            ('ccd1fa2f-38f0-484f-9383-f5b793208730', '03dccf47-6d9b-4835-847b-fcd4dff93c8e', 'abad2161-da52-443b-aa3a-33556fcd18db', '2022-02-10 18:55:20')
             """;
 
     public Migration() {
@@ -109,13 +138,10 @@ public class Migration {
         return false;
     }
 
-    private static final String INSERT_INTO_TABBLE_USERS_QUERY = """
-        insert into USERS(id, username, login, about, location, registered_since,follower_ids, following_ids, official_account)
-        values ('e0988b42-6b87-42ff-ab63-61ad5b621f8d',	'Kate Zyamileva',	'@kate',	'Girl',	'Odessa', '2009-08-02 22:19:12', array[]	,	array['ea8649fa-4feb-46df-9289-9bd34a289687', '03dccf47-6d9b-4835-847b-fcd4dff93c8e'],	'true')          
-         """;
-
     private void populateDB() {
-        executeQuery(INSERT_INTO_TABBLE_USERS_QUERY);
-
+        executeQuery(INSERT_INTO_TABLE_USERS_QUERY);
+        executeQuery(INSERT_INTO_TABLE_TWEETS_QUERY);
+        executeQuery(INSERT_INTO_TABLE_LIKES_QUERY);
+        executeQuery(INSERT_INTO_TABLE_RETWEETS_QUERY);
     }
 }
