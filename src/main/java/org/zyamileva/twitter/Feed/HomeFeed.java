@@ -12,7 +12,7 @@ import static org.zyamileva.twitter.utils.StringUtils.SEPARATOR;
 
 public class HomeFeed extends Feed {
 
-    private  User user;
+    private final User user;
 
     public HomeFeed(User user, TreeSet<TweetProjection> tweetProjections) {
         super(tweetProjections);

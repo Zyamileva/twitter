@@ -58,7 +58,7 @@ public class TweetServiceImpl implements TweetService {
                 errors.add("Reply tweet id can't be the same with this tweet id");
             }
         }
-        if (tweet.getReplyTweetId() != null &&!tweetDao.findById(tweet.getReplyTweetId()).isPresent()) {
+        if (tweet.getReplyTweetId() != null && !tweetDao.findById(tweet.getReplyTweetId()).isPresent()) {
             errors.add("Reply tweet id not exists for tweet");
         }
 
@@ -110,8 +110,9 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public boolean like(UUID userId, UUID tweetId) {
         BiConsumer<UUID, UUID> likeConsumer = (userIdConsumer, tweetIdConsumer) -> {
-            Like like = new Like(userIdConsumer, tweetIdConsumer);
-            like = likeDao.save(like);
+            if (!likeDao.likeExists(userId, tweetId)) {
+                likeDao.save(new Like(userIdConsumer, tweetIdConsumer));
+            }
         };
         return actionWithTweet(userId, tweetId, likeConsumer);
     }
@@ -119,8 +120,9 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public boolean retweet(UUID userId, UUID tweetId) {
         BiConsumer<UUID, UUID> retweetConsumer = (userIdConsumer, tweetIdConsumer) -> {
-            Retweet retweet = new Retweet(userIdConsumer, tweetIdConsumer);
-            retweet = retweetDao.save(retweet);
+            if (!retweetDao.retweetExists(userId, tweetId)) {
+                retweetDao.save(new Retweet(userIdConsumer, tweetIdConsumer));
+            }
         };
         return actionWithTweet(userId, tweetId, retweetConsumer);
     }

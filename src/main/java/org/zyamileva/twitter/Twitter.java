@@ -34,16 +34,16 @@ public class Twitter {
 //        kate.setOfficialAccount(true);
 //        anna.setOfficialAccount(true);
 //        nikita.setOfficialAccount(true);
-
-        System.out.println(feedService.buildHomeFeed(userService.findByLogin("@nikita_ivanov").orElseThrow().getId()));
-        System.out.println(feedService.buildUserFeed(userService.findByLogin("@anna").orElseThrow().getId()));
-        System.out.println(feedService.buildReplyFeed(UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db")));
+//
+//        System.out.println(feedService.buildHomeFeed(userService.findByLogin("@nikita_ivanov").orElseThrow().getId()));
+//        System.out.println(feedService.buildUserFeed(userService.findByLogin("@anna").orElseThrow().getId()));
+//        System.out.println(feedService.buildReplyFeed(UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db")));
 
 //        nikita = userService.saveUser(nikita).orElseThrow();
 
-        User kate = userService.findByLogin("@kate").orElseThrow();
-        User anna = userService.findByLogin("@anna").orElseThrow();
-        User nikita = userService.findByLogin("@nikita_ivanov").orElseThrow();
+//        User kate = userService.findByLogin("@kate").orElseThrow();
+//        User anna = userService.findByLogin("@anna").orElseThrow();
+//        User nikita = userService.findByLogin("@nikita_ivanov").orElseThrow();
 //        tweetService.retweet(userService.findByLogin("@anna").orElseThrow().getId(), UUID.fromString("abad2161-da52-443b-aa3a-33556fcd18db"));
 //        Tweet tweetKate = new Tweet(kate.getId(), "Hello!");
 //        tweetKate = tweetService.saveTweet(tweetKate).orElseThrow();
