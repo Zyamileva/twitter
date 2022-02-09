@@ -4,7 +4,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.configuration.options.Configuration;
+import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.configuration.options.DaoTypeOption;
+import org.zyamileva.twitter.entities.Tweet;
+import org.zyamileva.twitter.entities.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -106,6 +109,10 @@ public class Migration {
             if (configuration.isPopulateDB()) {
                 populateDB();
             }
+        } else {
+            if (configuration.isPopulateDB()) {
+                populateStorage();
+            }
         }
     }
 
@@ -132,16 +139,49 @@ public class Migration {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            log.error("Error during find all users");
+            log.error("Error during execute query");
         }
-        ;
         return false;
     }
 
+    private void deletingInvalidData() {
+        try (Connection connection = DriverManager.getConnection(H2_URL)) {
+            Statement statement = connection.createStatement();
+            statement.execute("DROP TABLE if exists likes");
+            statement.execute("DROP TABLE if exists retweets");
+            statement.execute("DROP TABLE if exists tweets");
+            statement.execute("DROP TABLE if exists users");
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error("Error during deleting invalid data query");
+        }
+    }
+
     private void populateDB() {
-        executeQuery(INSERT_INTO_TABLE_USERS_QUERY);
-        executeQuery(INSERT_INTO_TABLE_TWEETS_QUERY);
-        executeQuery(INSERT_INTO_TABLE_LIKES_QUERY);
-        executeQuery(INSERT_INTO_TABLE_RETWEETS_QUERY);
+        if (!executeQuery(INSERT_INTO_TABLE_USERS_QUERY) || !executeQuery(INSERT_INTO_TABLE_TWEETS_QUERY)
+                || !executeQuery(INSERT_INTO_TABLE_LIKES_QUERY) || !executeQuery(INSERT_INTO_TABLE_RETWEETS_QUERY)) {
+            deletingInvalidData();
+        }
+    }
+
+    private void populateStorage() {
+        User nikita = Context.getInstance().getUserService().saveUser(new User("Nikita Ivanov", "@nikita_ivanov")).orElseThrow();
+        User anna = Context.getInstance().getUserService().saveUser(new User("Anna Zyamileva", "@anna")).orElseThrow();
+        User kate = Context.getInstance().getUserService().saveUser(new User("Kate Zyamileva", "@kate_zyam")).orElseThrow();
+
+        Tweet tweetNikita = Context.getInstance().getTweetService().saveTweet(new Tweet(nikita.getId(), "Hello my friends")).orElseThrow();
+        Tweet tweetAnna = Context.getInstance().getTweetService().saveTweet(new Tweet(anna.getId(), "Hello my friends and @nikita_ivanov")).orElseThrow();
+        Tweet tweetKate = Context.getInstance().getTweetService().saveTweet(new Tweet(kate.getId(), "Hello!")).orElseThrow();
+
+        Context.getInstance().getTweetService().retweet(anna.getId(), tweetKate.getId());
+        Context.getInstance().getTweetService().retweet(anna.getId(), tweetNikita.getId());
+        Context.getInstance().getTweetService().like(anna.getId(), tweetKate.getId());
+        Context.getInstance().getTweetService().like(kate.getId(), tweetAnna.getId());
+
+        Context.getInstance().getUserService().subscribe(anna.getId(), kate.getId());
+        Context.getInstance().getUserService().subscribe(kate.getId(), anna.getId());
+
+        log.debug("Storage initialised.");
     }
 }

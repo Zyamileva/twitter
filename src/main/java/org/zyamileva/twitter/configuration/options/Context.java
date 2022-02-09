@@ -20,9 +20,9 @@ public class Context {
     private static final Logger log = LogManager.getLogger(Context.class);
 
     private UserDao userDao;
+    private RetweetDao retweetDao;
     private TweetDao tweetDao;
     private LikeDao likeDao;
-    private RetweetDao retweetDao;
 
     private UserService userService;
     private TweetService tweetService;
@@ -55,9 +55,9 @@ public class Context {
     private void initDao(Configuration configuration) {
         if (configuration.getDaoTypeOption() == DaoTypeOption.IN_MEMORY) {
             userDao = new UserInMemoryDao();
+            retweetDao = new RetweetInMemoryDao();
             tweetDao = new TweetInMemoryDao();
             likeDao = new LikeInMemoryDao();
-            retweetDao = new RetweetInMemoryDao();
         } else {
             userDao = new UserJDBCDao();
             tweetDao = new TweetJDBCDao();

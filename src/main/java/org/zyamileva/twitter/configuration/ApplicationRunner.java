@@ -12,8 +12,8 @@ public class ApplicationRunner {
 
     public static void run(String[] args) {
         Configuration configuration = createConfiguration(args);
-        Migration.getInstance().performMigration(configuration);
         Context.getInstance().initContext(configuration);
+        Migration.getInstance().performMigration(configuration);
     }
 
     private static Configuration createConfiguration(String[] args) {
