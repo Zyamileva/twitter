@@ -2,6 +2,9 @@ package org.zyamileva.twitter.configuration.options;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.zyamileva.twitter.dao.Factory.DaoFactory;
+import org.zyamileva.twitter.dao.Factory.JDBCFactoty;
+import org.zyamileva.twitter.dao.Factory.StorageFactory;
 import org.zyamileva.twitter.dao.Inmemory.LikeInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.RetweetInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.TweetInMemoryDao;
@@ -19,11 +22,7 @@ import org.zyamileva.twitter.service.*;
 public class Context {
     private static final Logger log = LogManager.getLogger(Context.class);
 
-    private UserDao userDao;
-    private RetweetDao retweetDao;
-    private TweetDao tweetDao;
-    private LikeDao likeDao;
-
+    private DaoFactory daoFactory;
     private UserService userService;
     private TweetService tweetService;
     private FeedService feedService;
@@ -54,15 +53,9 @@ public class Context {
 
     private void initDao(Configuration configuration) {
         if (configuration.getDaoTypeOption() == DaoTypeOption.IN_MEMORY) {
-            userDao = new UserInMemoryDao();
-            retweetDao = new RetweetInMemoryDao();
-            tweetDao = new TweetInMemoryDao();
-            likeDao = new LikeInMemoryDao();
+            daoFactory = new StorageFactory();
         } else {
-            userDao = new UserJDBCDao();
-            tweetDao = new TweetJDBCDao();
-            likeDao = new LikeJDBCDao();
-            retweetDao = new RetweetJDBCDao();
+            daoFactory = new JDBCFactoty();
         }
     }
 
@@ -72,20 +65,8 @@ public class Context {
         feedService = new FeedServiceImpl();
     }
 
-    public UserDao getUserDao() {
-        return userDao;
-    }
-
-    public TweetDao getTweetDao() {
-        return tweetDao;
-    }
-
-    public LikeDao getLikeDao() {
-        return likeDao;
-    }
-
-    public RetweetDao getRetweetDao() {
-        return retweetDao;
+    public DaoFactory getDaoFactory() {
+        return daoFactory;
     }
 
     public UserService getUserService() {

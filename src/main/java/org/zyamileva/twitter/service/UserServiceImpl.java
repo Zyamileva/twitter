@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao = Context.getInstance().getUserDao();
+    private final UserDao userDao = Context.getInstance().getDaoFactory().createUserDao();
     private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
     private static final int MIN_LENGTH_LOGIN = 3;
     private static final int MAX_LENGTH_LOGIN = 14;

@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
 
 public class TweetServiceImpl implements TweetService {
     private static final Logger log = LogManager.getLogger(TweetServiceImpl.class);
-    private final TweetDao tweetDao = Context.getInstance().getTweetDao();
-    private final UserDao userDao = Context.getInstance().getUserDao();
-    private final RetweetDao retweetDao = Context.getInstance().getRetweetDao();
-    private final LikeDao likeDao = Context.getInstance().getLikeDao();
+    private final TweetDao tweetDao = Context.getInstance().getDaoFactory().createTweetDao();
+    private final UserDao userDao = Context.getInstance().getDaoFactory().createUserDao();
+    private final RetweetDao retweetDao = Context.getInstance().getDaoFactory().createRetweetDao();
+    private final LikeDao likeDao = Context.getInstance().getDaoFactory().createLikeDao();
     private final UserService userService = Context.getInstance().getUserService();
     private static final int MAX_LENGTH = 140;
 
