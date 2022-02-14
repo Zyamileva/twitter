@@ -1,10 +1,14 @@
 package org.zyamileva.twitter.entities;
 
+import org.zyamileva.twitter.utils.StringUtils;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.zyamileva.twitter.utils.StringUtils.*;
 
 public class User extends PersistentEntity implements Cloneable {
     private String username;
@@ -129,17 +133,26 @@ public class User extends PersistentEntity implements Cloneable {
 
     @Override
     public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", login='" + login + '\'' +
-                ", about='" + about + '\'' +
-                ", location='" + location + '\'' +
-                ", registeredSince=" + registeredSince +
-                ", followerIds=" + followerIds +
-                ", followingIds=" + followingIds +
-                ", officialAccount=" + officialAccount +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        String header = String.format("%1$-20S", username);
+        if(officialAccount) {
+            header +=" " + OFFICIAL_EMOJI;
+        }
+        String registeredSinceString = String.format("%1$ta %1$tb %1$td %1$tT", registeredSince);
+        String footer = followerIds.size() + " follows " + followerIds.size() + " followers";
+
+        stringBuilder
+                .append(header).append(NEW_LINE)
+                .append(login).append(NEW_LINE);
+        if (about != null) {
+            stringBuilder.append(about).append(NEW_LINE);
+        }
+        if (location != null) {
+            stringBuilder.append(LOCATION_EMOJI).append(SPACE).append(location).append(NEW_LINE);
+        }
+        stringBuilder.append(CALENDAR_EMOJI).append(SPACE).append(registeredSinceString).append(NEW_LINE);
+        stringBuilder.append(footer);
+        return stringBuilder.toString();
     }
 
     @Override

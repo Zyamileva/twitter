@@ -6,10 +6,7 @@ import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -148,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> findByIds(Set<UUID> ids) {
-        return userDao.findByIds(ids);
+        return ids.isEmpty() ? Collections.emptySet() : userDao.findByIds(ids);
     }
 
     @Override

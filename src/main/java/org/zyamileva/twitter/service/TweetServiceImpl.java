@@ -6,6 +6,10 @@ import org.zyamileva.twitter.dao.Inmemory.LikeInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.RetweetInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.TweetInMemoryDao;
 import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.LikeJDBCDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.RetweetJDBCDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.TweetJDBCDao;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.dao.TweetDao;
@@ -22,10 +26,10 @@ import java.util.regex.Pattern;
 
 public class TweetServiceImpl implements TweetService {
     private static final Logger log = LogManager.getLogger(TweetService.class);
-    private final TweetDao tweetDao = new TweetInMemoryDao();
-    private final UserDao userDao = new UserInMemoryDao();
-    private final RetweetDao retweetDao = new RetweetInMemoryDao();
-    private final LikeDao likeDao = new LikeInMemoryDao();
+    private final TweetDao tweetDao = new TweetJDBCDao();
+    private final UserDao userDao = new UserJDBCDao();
+    private final RetweetDao retweetDao = new RetweetJDBCDao();
+    private final LikeDao likeDao = new LikeJDBCDao();
     private final UserService userService = new UserServiceImpl();
     private static final int MAX_LENGTH = 140;
 
@@ -42,6 +46,22 @@ public class TweetServiceImpl implements TweetService {
 
     private Set<String> validateTweet(Tweet tweet) {
         Set<String> errors = new HashSet<>();
+        if (tweet == null) {
+            errors.add("Tweet can't be null");
+            return errors;
+        }
+        if (!userService.existById((tweet.getUserId()))) {
+            errors.add("User not exists for tweet");
+        }
+        if (tweet.getReplyTweetId() != null) {
+            if (tweet.getReplyTweetId().equals(tweet.getId())) {
+                errors.add("Reply tweet id can't be the same with this tweet id");
+            }
+        }
+        if (tweet.getReplyTweetId() != null && !tweetDao.findById(tweet.getReplyTweetId()).isPresent()) {
+            errors.add("Reply tweet id not exists for tweet");
+        }
+
         if (tweet.getContent().isBlank() || tweet.getContent().isEmpty()) {
             errors.add("Tweet content can't be blank or empty");
         }
@@ -74,7 +94,7 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public Set<Tweet> findFollowingTweets(Set<UUID> userIds) {
-        return tweetDao.findFollowingTweets(userIds);
+        return userIds.isEmpty() ? Collections.emptySet() : tweetDao.findFollowingTweets(userIds);
     }
 
     @Override
@@ -90,8 +110,9 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public boolean like(UUID userId, UUID tweetId) {
         BiConsumer<UUID, UUID> likeConsumer = (userIdConsumer, tweetIdConsumer) -> {
-            Like like = new Like(userIdConsumer, tweetIdConsumer);
-            like = likeDao.save(like);
+            if (!likeDao.likeExists(userId, tweetId)) {
+                likeDao.save(new Like(userIdConsumer, tweetIdConsumer));
+            }
         };
         return actionWithTweet(userId, tweetId, likeConsumer);
     }
@@ -99,8 +120,9 @@ public class TweetServiceImpl implements TweetService {
     @Override
     public boolean retweet(UUID userId, UUID tweetId) {
         BiConsumer<UUID, UUID> retweetConsumer = (userIdConsumer, tweetIdConsumer) -> {
-            Retweet retweet = new Retweet(userIdConsumer, tweetIdConsumer);
-            retweet = retweetDao.save(retweet);
+            if (!retweetDao.retweetExists(userId, tweetId)) {
+                retweetDao.save(new Retweet(userIdConsumer, tweetIdConsumer));
+            }
         };
         return actionWithTweet(userId, tweetId, retweetConsumer);
     }
@@ -112,9 +134,11 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public void delete(Tweet tweet) {
-        likeDao.deleteAllByTweetId(tweet.getId());
-        retweetDao.deleteAllByTweetId(tweet.getId());
-        tweetDao.delete(tweet);
+        if (tweet != null) {
+            likeDao.deleteAllByTweetId(tweet.getId());
+            retweetDao.deleteAllByTweetId(tweet.getId());
+            tweetDao.delete(tweet);
+        }
     }
 
     @Override

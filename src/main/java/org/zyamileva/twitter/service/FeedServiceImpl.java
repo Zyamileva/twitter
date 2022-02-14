@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.Feed.HomeFeed;
 import org.zyamileva.twitter.Feed.ReplyFeed;
 import org.zyamileva.twitter.Feed.UserFeed;
+import org.zyamileva.twitter.dao.Inmemory.jdbc.RetweetJDBCDao;
+import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.entities.PersistentEntity;
 import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.entities.User;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class FeedServiceImpl implements FeedService {
     private final UserService userService = new UserServiceImpl();
     private final TweetService tweetService = new TweetServiceImpl();
+    private final RetweetDao retweetDao = new RetweetJDBCDao();
     private static final Logger log = LogManager.getLogger(TweetService.class);
 
     private TreeSet<TweetProjection> getTweetProjections(Set<Tweet> tweets, Map<UUID, User> authorIdToAuthor) {
@@ -24,7 +27,7 @@ public class FeedServiceImpl implements FeedService {
                 .map(tweet -> new TweetProjection(
                         authorIdToAuthor.get(tweet.getUserId()).getUsername(),
                         authorIdToAuthor.get(tweet.getUserId()).getLogin(),
-                        tweet.getDataPosted(),
+                        tweet.getDatePosted(),
                         tweet.getContent(),
                         tweetService.countLikes(tweet.getId()),
                         tweetService.countRetweets(tweet.getId())
@@ -40,14 +43,15 @@ public class FeedServiceImpl implements FeedService {
             return null;
         }
         User user = userOptional.get();
-
         Set<Tweet> tweets = tweetService.findTweetsByUserId(userId);
         Set<Tweet> retweets = tweetService.findRetweetsByUserId(userId);
         tweets.addAll(retweets);
 
-        Map<UUID, User> authorIdToAutor = tweets
+        Map<UUID, User> authorIdToAutor = retweets
                 .stream()
-                .collect(Collectors.toMap(tweet -> tweet.getUserId(), tweet -> userService.findById(tweet.getUserId()).get()));
+                .collect(Collectors.toMap(retweet -> (retweet.getUserId()), retweet -> userService.findById(retweet.getUserId()).get()));
+
+        authorIdToAutor.put(userId, userService.findById(userId).orElseThrow());
 
         TreeSet tweetProjections = getTweetProjections(tweets, authorIdToAutor);
         return new UserFeed(user, tweetProjections);

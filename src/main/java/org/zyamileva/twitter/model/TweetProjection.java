@@ -1,7 +1,11 @@
 package org.zyamileva.twitter.model;
 
+import org.zyamileva.twitter.utils.StringUtils;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static org.zyamileva.twitter.utils.StringUtils.*;
 
 public class TweetProjection implements Comparable<TweetProjection> {
     private String userName;
@@ -75,12 +79,12 @@ public class TweetProjection implements Comparable<TweetProjection> {
         StringBuilder builder = new StringBuilder();
         String header = String.format("%1$-20s %2$-14s %3$ta %3$tb %3$td %3$tT", userName, userLogin, datePosted);
         String body = String.format("%-140s", content);
-        String footage = String.format("%1$-20s %2$-20s", "\ud83d\udc99" + likes, "\uD83D\uDD04 " + retweets);
+        String footage = String.format("%1$-20s %2$-20s", LIKE_EMOJI + likes, RETWEET_EMOJI + retweets);
         builder
                 .append(header)
-                .append("\n")
+                .append(NEW_LINE)
                 .append(body)
-                .append("\n")
+                .append(NEW_LINE)
                 .append(footage);
         return builder.toString();
     }
