@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TweetServiceImpl implements TweetService {
-    private static final Logger log = LogManager.getLogger(TweetService.class);
+    private static final Logger log = LogManager.getLogger(TweetServiceImpl.class);
     private final TweetDao tweetDao = Context.getInstance().getTweetDao();
     private final UserDao userDao = Context.getInstance().getUserDao();
     private final RetweetDao retweetDao = Context.getInstance().getRetweetDao();

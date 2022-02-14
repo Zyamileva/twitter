@@ -1,6 +1,5 @@
 package org.zyamileva.twitter.configuration.migrations;
 
-import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.configuration.options.Configuration;
@@ -147,10 +146,10 @@ public class Migration {
     private void deletingInvalidData() {
         try (Connection connection = DriverManager.getConnection(H2_URL)) {
             Statement statement = connection.createStatement();
-            statement.execute("DROP TABLE if exists likes");
-            statement.execute("DROP TABLE if exists retweets");
-            statement.execute("DROP TABLE if exists tweets");
-            statement.execute("DROP TABLE if exists users");
+            statement.execute("delete from likes");
+            statement.execute("delete from retweets");
+            statement.execute("delete from tweets");
+            statement.execute("delete from users");
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
