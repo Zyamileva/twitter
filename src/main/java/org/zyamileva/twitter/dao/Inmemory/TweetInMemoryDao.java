@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TweetInMemoryDao implements TweetDao {
-    private final RetweetDao retweetDao = Context.getInstance().getDaoFactory().createRetweetDao();
+    private final RetweetDao retweetDao = Context.getInstance().getRetweetDao();
 
     @Override
     public Tweet save(Tweet entity) {

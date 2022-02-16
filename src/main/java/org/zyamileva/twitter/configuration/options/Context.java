@@ -22,7 +22,11 @@ import org.zyamileva.twitter.service.*;
 public class Context {
     private static final Logger log = LogManager.getLogger(Context.class);
 
-    private DaoFactory daoFactory;
+    private UserDao userDao;
+    private RetweetDao retweetDao;
+    private TweetDao tweetDao;
+    private LikeDao likeDao;
+
     private UserService userService;
     private TweetService tweetService;
     private FeedService feedService;
@@ -52,11 +56,16 @@ public class Context {
     }
 
     private void initDao(Configuration configuration) {
+        DaoFactory daoFactory;
         if (configuration.getDaoTypeOption() == DaoTypeOption.IN_MEMORY) {
             daoFactory = new StorageFactory();
         } else {
             daoFactory = new JDBCFactoty();
         }
+        this.userDao = daoFactory.createUserDao();
+        this.tweetDao = daoFactory.createTweetDao();
+        this.likeDao = daoFactory.createLikeDao();
+        this.retweetDao = daoFactory.createRetweetDao();
     }
 
     private void initServices() {
@@ -65,8 +74,20 @@ public class Context {
         feedService = new FeedServiceImpl();
     }
 
-    public DaoFactory getDaoFactory() {
-        return daoFactory;
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public RetweetDao getRetweetDao() {
+        return retweetDao;
+    }
+
+    public TweetDao getTweetDao() {
+        return tweetDao;
+    }
+
+    public LikeDao getLikeDao() {
+        return likeDao;
     }
 
     public UserService getUserService() {
