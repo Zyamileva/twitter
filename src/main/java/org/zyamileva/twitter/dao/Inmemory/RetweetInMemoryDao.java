@@ -2,7 +2,6 @@ package org.zyamileva.twitter.dao.Inmemory;
 
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.entities.Retweet;
-import org.zyamileva.twitter.entities.Tweet;
 
 import java.util.List;
 import java.util.Optional;

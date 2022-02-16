@@ -20,7 +20,7 @@
     },
     "loggers": {
       "root": {
-        "level": "info",
+        "level": "debug",
         "AppenderRef": [
           {
             "ref": "Console"
