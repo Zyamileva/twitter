@@ -15,5 +15,6 @@ public class Twitter {
 
 //        System.out.println(Context.getInstance().getFeedService().buildHomeFeed(Context.getInstance().getUserService().findByLogin("@anna").orElseThrow().getId()));
 //        System.out.println(Context.getInstance().getFeedService().buildUserFeed(Context.getInstance().getUserService().findByLogin("@anna").orElseThrow().getId()));
+
     }
 }
