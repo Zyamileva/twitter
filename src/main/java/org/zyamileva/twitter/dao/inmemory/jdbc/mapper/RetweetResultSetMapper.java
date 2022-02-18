@@ -1,6 +1,5 @@
-package org.zyamileva.twitter.dao.Inmemory.jdbc.mapper;
+package org.zyamileva.twitter.dao.inmemory.jdbc.mapper;
 
-import org.zyamileva.twitter.entities.Like;
 import org.zyamileva.twitter.entities.Retweet;
 
 import java.sql.ResultSet;

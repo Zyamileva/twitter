@@ -1,8 +1,8 @@
-package org.zyamileva.twitter.dao.Inmemory.jdbc;
+package org.zyamileva.twitter.dao.inmemory.jdbc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.TweetResultSetMapper;
+import org.zyamileva.twitter.dao.inmemory.jdbc.mapper.TweetResultSetMapper;
 import org.zyamileva.twitter.dao.TweetDao;
 import org.zyamileva.twitter.entities.Tweet;
 
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
-import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.UUID_TYPE;
+import static org.zyamileva.twitter.dao.inmemory.jdbc.H2Properties.H2_URL;
+import static org.zyamileva.twitter.dao.inmemory.jdbc.H2Properties.UUID_TYPE;
 
 public class TweetJDBCDao implements TweetDao {
     private static final Logger log = LogManager.getLogger(TweetJDBCDao.class);

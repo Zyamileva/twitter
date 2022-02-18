@@ -2,14 +2,9 @@ package org.zyamileva.twitter.configuration.options;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.LikeInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.RetweetInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.TweetInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.LikeJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.RetweetJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.TweetJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
+import org.zyamileva.twitter.dao.factory.DaoFactory;
+import org.zyamileva.twitter.dao.factory.JDBCFactoty;
+import org.zyamileva.twitter.dao.factory.StorageFactory;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.dao.TweetDao;
@@ -53,17 +48,16 @@ public class Context {
     }
 
     private void initDao(Configuration configuration) {
+        DaoFactory daoFactory;
         if (configuration.getDaoTypeOption() == DaoTypeOption.IN_MEMORY) {
-            userDao = new UserInMemoryDao();
-            retweetDao = new RetweetInMemoryDao();
-            tweetDao = new TweetInMemoryDao();
-            likeDao = new LikeInMemoryDao();
+            daoFactory = new StorageFactory();
         } else {
-            userDao = new UserJDBCDao();
-            tweetDao = new TweetJDBCDao();
-            likeDao = new LikeJDBCDao();
-            retweetDao = new RetweetJDBCDao();
+            daoFactory = new JDBCFactoty();
         }
+        this.userDao = daoFactory.createUserDao();
+        this.tweetDao = daoFactory.createTweetDao();
+        this.likeDao = daoFactory.createLikeDao();
+        this.retweetDao = daoFactory.createRetweetDao();
     }
 
     private void initServices() {
@@ -76,16 +70,16 @@ public class Context {
         return userDao;
     }
 
+    public RetweetDao getRetweetDao() {
+        return retweetDao;
+    }
+
     public TweetDao getTweetDao() {
         return tweetDao;
     }
 
     public LikeDao getLikeDao() {
         return likeDao;
-    }
-
-    public RetweetDao getRetweetDao() {
-        return retweetDao;
     }
 
     public UserService getUserService() {

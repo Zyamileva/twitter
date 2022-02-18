@@ -1,4 +1,4 @@
-package org.zyamileva.twitter.dao.Inmemory;
+package org.zyamileva.twitter.dao.inmemory;
 
 import org.zyamileva.twitter.entities.Like;
 import org.zyamileva.twitter.entities.Retweet;
@@ -6,7 +6,6 @@ import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.entities.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
