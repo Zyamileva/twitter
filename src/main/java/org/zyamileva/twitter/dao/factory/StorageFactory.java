@@ -1,10 +1,10 @@
-package org.zyamileva.twitter.dao.Factory;
+package org.zyamileva.twitter.dao.factory;
 
 import org.zyamileva.twitter.dao.*;
-import org.zyamileva.twitter.dao.Inmemory.LikeInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.RetweetInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.TweetInMemoryDao;
-import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
+import org.zyamileva.twitter.dao.inmemory.LikeInMemoryDao;
+import org.zyamileva.twitter.dao.inmemory.RetweetInMemoryDao;
+import org.zyamileva.twitter.dao.inmemory.TweetInMemoryDao;
+import org.zyamileva.twitter.dao.inmemory.UserInMemoryDao;
 
 public class StorageFactory implements DaoFactory {
 

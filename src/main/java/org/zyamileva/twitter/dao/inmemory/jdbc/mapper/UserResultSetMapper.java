@@ -1,4 +1,4 @@
-package org.zyamileva.twitter.dao.Inmemory.jdbc.mapper;
+package org.zyamileva.twitter.dao.inmemory.jdbc.mapper;
 
 import org.zyamileva.twitter.entities.User;
 

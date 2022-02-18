@@ -1,8 +1,8 @@
-package org.zyamileva.twitter.dao.Inmemory.jdbc;
+package org.zyamileva.twitter.dao.inmemory.jdbc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.mapper.LikeResultSetMapper;
+import org.zyamileva.twitter.dao.inmemory.jdbc.mapper.LikeResultSetMapper;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.entities.Like;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
+import static org.zyamileva.twitter.dao.inmemory.jdbc.H2Properties.H2_URL;
 
 public class LikeJDBCDao implements LikeDao {
     private static final Logger log = LogManager.getLogger(LikeJDBCDao.class);

@@ -2,9 +2,9 @@ package org.zyamileva.twitter.configuration.options;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.dao.Factory.DaoFactory;
-import org.zyamileva.twitter.dao.Factory.JDBCFactoty;
-import org.zyamileva.twitter.dao.Factory.StorageFactory;
+import org.zyamileva.twitter.dao.factory.DaoFactory;
+import org.zyamileva.twitter.dao.factory.JDBCFactoty;
+import org.zyamileva.twitter.dao.factory.StorageFactory;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.dao.TweetDao;

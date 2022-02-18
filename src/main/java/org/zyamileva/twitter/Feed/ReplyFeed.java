@@ -1,7 +1,5 @@
 package org.zyamileva.twitter.Feed;
 
-import org.zyamileva.twitter.dao.Inmemory.UserInMemoryDao;
-import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.model.TweetProjection;
 import org.zyamileva.twitter.service.TweetService;
@@ -9,7 +7,6 @@ import org.zyamileva.twitter.service.TweetServiceImpl;
 import org.zyamileva.twitter.service.UserService;
 import org.zyamileva.twitter.service.UserServiceImpl;
 
-import java.util.Set;
 import java.util.TreeSet;
 
 import static org.zyamileva.twitter.utils.StringUtils.NEW_LINE;
