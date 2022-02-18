@@ -1,4 +1,4 @@
-package org.zyamileva.twitter.Feed;
+package org.zyamileva.twitter.feed;
 
 import org.zyamileva.twitter.entities.Tweet;
 import org.zyamileva.twitter.model.TweetProjection;
