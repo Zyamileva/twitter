@@ -1,4 +1,4 @@
-package org.zyamileva.twitter.dao.Factory;
+package org.zyamileva.twitter.dao.factory;
 
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.dao.RetweetDao;

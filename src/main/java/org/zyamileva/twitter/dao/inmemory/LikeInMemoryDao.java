@@ -1,4 +1,4 @@
-package org.zyamileva.twitter.dao.Inmemory;
+package org.zyamileva.twitter.dao.inmemory;
 
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.entities.Like;

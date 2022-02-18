@@ -13,7 +13,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.zyamileva.twitter.dao.Inmemory.jdbc.H2Properties.H2_URL;
+import static org.zyamileva.twitter.dao.inmemory.jdbc.H2Properties.H2_URL;
 
 public class Migration {
     private static final Logger log = LogManager.getLogger(Migration.class);

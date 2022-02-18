@@ -1,6 +1,5 @@
 package org.zyamileva.twitter;
 
-import org.zyamileva.twitter.Feed.HomeFeed;
 import org.zyamileva.twitter.configuration.ApplicationRunner;
 import org.zyamileva.twitter.configuration.options.Context;
 

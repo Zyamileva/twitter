@@ -2,9 +2,9 @@ package org.zyamileva.twitter.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zyamileva.twitter.Feed.HomeFeed;
-import org.zyamileva.twitter.Feed.ReplyFeed;
-import org.zyamileva.twitter.Feed.UserFeed;
+import org.zyamileva.twitter.feed.HomeFeed;
+import org.zyamileva.twitter.feed.ReplyFeed;
+import org.zyamileva.twitter.feed.UserFeed;
 import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.entities.PersistentEntity;

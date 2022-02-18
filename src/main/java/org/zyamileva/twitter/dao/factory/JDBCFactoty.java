@@ -1,9 +1,9 @@
-package org.zyamileva.twitter.dao.Factory;
+package org.zyamileva.twitter.dao.factory;
 
-import org.zyamileva.twitter.dao.Inmemory.jdbc.LikeJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.RetweetJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.TweetJDBCDao;
-import org.zyamileva.twitter.dao.Inmemory.jdbc.UserJDBCDao;
+import org.zyamileva.twitter.dao.inmemory.jdbc.LikeJDBCDao;
+import org.zyamileva.twitter.dao.inmemory.jdbc.RetweetJDBCDao;
+import org.zyamileva.twitter.dao.inmemory.jdbc.TweetJDBCDao;
+import org.zyamileva.twitter.dao.inmemory.jdbc.UserJDBCDao;
 import org.zyamileva.twitter.dao.LikeDao;
 import org.zyamileva.twitter.dao.RetweetDao;
 import org.zyamileva.twitter.dao.TweetDao;
