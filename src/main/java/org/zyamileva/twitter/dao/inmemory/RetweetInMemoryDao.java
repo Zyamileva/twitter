@@ -28,8 +28,9 @@ public class RetweetInMemoryDao implements RetweetDao {
     }
 
     @Override
-    public void delete(Retweet entity) {
+    public Object delete(Retweet entity) {
         Storage.getInstance().deleteRetweet(entity);
+        return null;
     }
 
     @Override

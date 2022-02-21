@@ -86,7 +86,7 @@ public class LikeJDBCDao implements LikeDao {
     }
 
     @Override
-    public void delete(Like entity) {
+    public Object delete(Like entity) {
         final String deleteQuery = """
                 delete from likes
                 where id = ?
@@ -100,6 +100,7 @@ public class LikeJDBCDao implements LikeDao {
             e.printStackTrace();
             log.error("Error during delete like " + entity);
         }
+        return null;
     }
 
     @Override

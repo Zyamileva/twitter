@@ -165,9 +165,9 @@ public class Migration {
     }
 
     private void populateStorage() {
-        User nikita = Context.getInstance().getUserService().saveUser(new User("Nikita Ivanov", "@nikita_ivanov")).orElseThrow();
-        User anna = Context.getInstance().getUserService().saveUser(new User("Anna Zyamileva", "@anna")).orElseThrow();
-        User kate = Context.getInstance().getUserService().saveUser(new User("Kate Zyamileva", "@kate_zyam")).orElseThrow();
+        User nikita = Context.getInstance().getUserService().saveUser(new User("Nikita Ivanov", "@nikita_ivanov")).getUserOptional().orElseThrow();
+        User anna = Context.getInstance().getUserService().saveUser(new User("Anna Zyamileva", "@anna")).getUserOptional().orElseThrow();
+        User kate = Context.getInstance().getUserService().saveUser(new User("Kate Zyamileva", "@kate_zyam")).getUserOptional().orElseThrow();
 
         Tweet tweetNikita = Context.getInstance().getTweetService().saveTweet(new Tweet(nikita.getId(), "Hello my friends")).orElseThrow();
         Tweet tweetAnna = Context.getInstance().getTweetService().saveTweet(new Tweet(anna.getId(), "Hello my friends and @nikita_ivanov")).orElseThrow();

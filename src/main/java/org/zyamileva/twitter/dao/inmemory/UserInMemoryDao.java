@@ -27,8 +27,9 @@ public class UserInMemoryDao implements UserDao {
     }
 
     @Override
-    public void delete(User entity) {
+    public Object delete(User entity) {
         Storage.getInstance().deleteUser(entity);
+        return null;
     }
 
     @Override

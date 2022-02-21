@@ -36,6 +36,17 @@ public class Context {
 
     private boolean contextInitialised = false;
 
+    public void initContext(UserDao userDao, TweetDao tweetDao, LikeDao likeDao, RetweetDao retweetDao,
+                            UserService userService, TweetService tweetService, FeedService feedService) {
+        this.userDao = userDao;
+        this.tweetDao = tweetDao;
+        this.likeDao = likeDao;
+        this.retweetDao = retweetDao;
+        this.userService = userService;
+        this.tweetService = tweetService;
+        this.feedService=feedService;
+    }
+
     public void initContext(Configuration configuration) {
         if (!contextInitialised) {
             initDao(configuration);

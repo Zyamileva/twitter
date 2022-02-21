@@ -88,7 +88,7 @@ public class TweetJDBCDao implements TweetDao {
 
 
     @Override
-    public void delete(Tweet entity) {
+    public Object delete(Tweet entity) {
         final String deleteQuery = """
                 delete from tweets
                 where id = ?
@@ -102,6 +102,7 @@ public class TweetJDBCDao implements TweetDao {
             e.printStackTrace();
             log.error("Error during delete tweet " + entity);
         }
+        return null;
     }
 
     @Override

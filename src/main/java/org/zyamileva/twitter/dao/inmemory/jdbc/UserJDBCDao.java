@@ -133,7 +133,7 @@ public class UserJDBCDao implements UserDao {
     }
 
     @Override
-    public void delete(User entity) {
+    public Object delete(User entity) {
         final String deleteQuery = """
                 delete from users
                 where id = ?
@@ -148,6 +148,7 @@ public class UserJDBCDao implements UserDao {
             log.error("Error during delete user " + entity);
         }
 
+        return null;
     }
 
     @Override
