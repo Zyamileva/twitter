@@ -6,21 +6,19 @@ import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.service.UserService;
 
 import java.util.Set;
-import java.util.UUID;
 
-public class FindUserByIdCommand extends Command {
+public class FindUserByLoginCommand extends Command {
     private final UserService userService = Context.getInstance().getUserService();
 
-    public FindUserByIdCommand() {
-        super(CommandEnum.FIND_USER_BY_ID);
+    public FindUserByLoginCommand() {
+        super(CommandEnum.FIND_USER_BY_LOGIN);
     }
 
-    @Override
     public CommandResponse execute() {
-        UUID id = CommandLineReader.readUUID("Please enter user id:");
-        return userService.findById(id)
+        String login = CommandLineReader.readLine("Please enter user login:");
+        return userService.findByLogin(login)
                 .map(user -> new CommandResponse(true, user.toString()))
-                .orElseGet(()->new CommandResponse(false, Set.of("User not found by id: " + id)));
+                .orElseGet(() -> new CommandResponse(false, Set.of("User not found by login: " + login)));
     }
 
     @Override

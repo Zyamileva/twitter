@@ -5,9 +5,6 @@ import org.zyamileva.twitter.commands.general.ShowMainCommand;
 import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.service.UserService;
 
-import java.util.Set;
-import java.util.UUID;
-
 import static org.zyamileva.twitter.utils.StringUtils.NEW_LINE;
 import static org.zyamileva.twitter.utils.StringUtils.SEPARATOR_SHORT;
 
@@ -33,6 +30,6 @@ public class FindAllUsersCommand extends Command {
 
     @Override
     public NextCommands nextCommands() {
-        return new NextCommands(new ShowMainCommand());
+        return new NextCommands(new ShowMainCommand(), new FindUserByIdCommand());
     }
 }
