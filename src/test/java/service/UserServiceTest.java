@@ -2,7 +2,6 @@ package service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,12 +14,10 @@ import org.zyamileva.twitter.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static utils.TestUtils.stringToArray;
 import static utils.TestUtils.stringsToArray;
 
 public class UserServiceTest extends AbsrtactTest {
@@ -30,25 +27,25 @@ public class UserServiceTest extends AbsrtactTest {
 
     private static Stream<Arguments> supplyInvalidUsers() {
         return Stream.of(
-                Arguments.of(null, stringToArray("User can't be null")),
-                Arguments.of(new User("     ", VALID_USER_LOGIN), stringToArray("Username must not be empty or blank")),
-                Arguments.of(new User("", VALID_USER_LOGIN), stringToArray("Username must not be empty or blank")),
-                Arguments.of(new User("l", VALID_USER_LOGIN), stringToArray("Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.")),
-                Arguments.of(new User("lllllllllllllllllllll", VALID_USER_LOGIN), stringToArray("Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.")),
-                Arguments.of(new User(VALID_USERNAME, ""), stringToArray("Login must not be empty or blank")),
-                Arguments.of(new User(VALID_USERNAME, "          "), stringToArray("Login must not be empty or blank")),
-                Arguments.of(new User(VALID_USERNAME, "test_user"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "Test_user"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "test_user1"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "t"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "test_user________"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "test_user*"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "Ty7"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "ty7"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "@test user"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "test_user"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "7776"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
-                Arguments.of(new User(VALID_USERNAME, "****&"), stringToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(null, stringsToArray("User can't be null")),
+                Arguments.of(new User("     ", VALID_USER_LOGIN), stringsToArray("Username must not be empty or blank")),
+                Arguments.of(new User("", VALID_USER_LOGIN), stringsToArray("Username must not be empty or blank")),
+                Arguments.of(new User("l", VALID_USER_LOGIN), stringsToArray("Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.")),
+                Arguments.of(new User("lllllllllllllllllllll", VALID_USER_LOGIN), stringsToArray("Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.")),
+                Arguments.of(new User(VALID_USERNAME, ""), stringsToArray("Login must not be empty or blank")),
+                Arguments.of(new User(VALID_USERNAME, "          "), stringsToArray("Login must not be empty or blank")),
+                Arguments.of(new User(VALID_USERNAME, "test_user"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "Test_user"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "test_user1"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "t"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "test_user________"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "test_user*"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "Ty7"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "ty7"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "@test user"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "test_user"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "7776"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
+                Arguments.of(new User(VALID_USERNAME, "****&"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters")),
                 Arguments.of(new User("k", "777"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters", "Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.")),
                 Arguments.of(new User("jjjjjjjjjjjjjjkkkkklkk", "@j"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters", "Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.")),
                 Arguments.of(new User("     ", "@ddf3"), stringsToArray("Login must start with the @ sign. It can contain an underscore character and at least one lowercase letter. It must be at least 3 and no more than 14 characters", "Username must not be empty or blank")),
@@ -88,7 +85,7 @@ public class UserServiceTest extends AbsrtactTest {
 
     @Test
     @DisplayName("User should not be update if login has been taken by another user")
-    public void userShouldBeCreatedIfLoginTaken() {
+    public void userShouldBeUpdatedIfLoginTaken() {
         String login = "@jjjj";
         User userWithTakenLogin = new User("ganna", login);
         userWithTakenLogin.setId(UUID.randomUUID());
@@ -101,7 +98,7 @@ public class UserServiceTest extends AbsrtactTest {
         User originalUserToUpdate = originalUser.clone();
         originalUserToUpdate.setLogin(login);
 
-        String[] expectedErrors = stringToArray("This login: " + login + " is already taken");
+        String[] expectedErrors = stringsToArray("This login: " + login + " is already taken");
         when(userDaoMock.findById(originalUserToUpdate.getId())).thenReturn(Optional.of(originalUser));
         when(userDaoMock.findByLogin(originalUserToUpdate.getLogin())).thenReturn(Optional.of(userWithTakenLogin));
 
@@ -146,68 +143,64 @@ public class UserServiceTest extends AbsrtactTest {
         initialUser.setId(UUID.randomUUID());
         initialUser.setRegisteredSince(LocalDateTime.now());
 
-        assertEquals(initialUser, initialUser);
-        assertTrue(initialUser.getId().equals(initialUser.getId()));
-        assertTrue(initialUser.getLogin().equals(initialUser.getLogin()));
-        assertTrue(initialUser.getRegisteredSince().equals(initialUser.getRegisteredSince()));
+        assertTrue(!userService.subscribe(initialUser.getId(), initialUser.getId()));
     }
 
     @Test
     @DisplayName("InitialUser must not be subscribe because invalid userId")
     public void initialUserMustNotBeSubscribeInvalidUserId() {
         User subscriberUser = new User("ann", "@ann");
-        User initialUser = null;
-        Optional initialUserOptional = Optional.empty();
+        User initialUser = new User("igor", "@igor");
+
         subscriberUser.setId(UUID.randomUUID());
         subscriberUser.setRegisteredSince(LocalDateTime.now());
+        initialUser.setId(UUID.randomUUID());
+        initialUser.setRegisteredSince(LocalDateTime.now());
 
-        assertTrue(initialUserOptional.isEmpty());
-        assertNotEquals(initialUser, subscriberUser);
+        when(userDaoMock.findById(initialUser.getId())).thenReturn(Optional.empty());
+
+        assertTrue(!userService.subscribe(subscriberUser.getId(), initialUser.getId()));
     }
 
     @Test
     @DisplayName("SubscribeUser must not be subscribe because invalid userId")
     public void subscribeUserMustNotBeSubscribeInvalidUserId() {
         User initialUser = new User("aaan", "@an");
-        User subscriberUser = null;
-        Optional subscriberUserOptional = Optional.empty();
-        initialUser.setId(UUID.randomUUID());
-        initialUser.setRegisteredSince(LocalDateTime.now());
-
-        assertTrue(subscriberUserOptional.isEmpty());
-        assertNotEquals(initialUser, subscriberUser);
-    }
-
-    @Test
-    @DisplayName("Subscribe")
-    public void subscribe() {
-        User initialUser = new User("lera", "@Lera");
-        User subscriberUser = new User("igor", "@Igor");
+        User subscriberUser = new User("vova", "@vova");
 
         initialUser.setId(UUID.randomUUID());
         initialUser.setRegisteredSince(LocalDateTime.now());
         subscriberUser.setId(UUID.randomUUID());
         subscriberUser.setRegisteredSince(LocalDateTime.now());
 
-        User updateInitialUser = initialUser.clone();
-        User updateSubscriberUser = subscriberUser.clone();
+        when(userDaoMock.findById(subscriberUser.getId())).thenReturn(Optional.empty());
 
-        updateInitialUser.getFollowingIds().add(subscriberUser.getId());
-        updateSubscriberUser.getFollowerIds().add(initialUser.getId());
-
-        when(userDaoMock.save(initialUser)).thenReturn(updateInitialUser);
-        when(userDaoMock.save(subscriberUser)).thenReturn(updateSubscriberUser);
-
-        userDaoMock.save(initialUser);
-        userDaoMock.save(subscriberUser);
-
-        assertNotEquals(updateInitialUser, updateSubscriberUser);
-        assertTrue(updateInitialUser.getFollowingIds().contains(updateSubscriberUser.getId()));
-        assertTrue(updateSubscriberUser.getFollowerIds().contains(updateInitialUser.getId()));
+        assertTrue(!userService.subscribe(subscriberUser.getId(), initialUser.getId()));
     }
 
     @Test
-    @DisplayName("Unsubscribe")
+    @DisplayName("The subscription mechanism should work without errors if all the data is correct")
+    public void subscribe() {
+        User initialUser = new User("lera", "@lera");
+        User subscriberUser = new User("igor", "@igor");
+
+        initialUser.setId(UUID.randomUUID());
+        initialUser.setRegisteredSince(LocalDateTime.now());
+        subscriberUser.setId(UUID.randomUUID());
+        subscriberUser.setRegisteredSince(LocalDateTime.now());
+
+        when(userDaoMock.findById(initialUser.getId())).thenReturn(Optional.of(initialUser));
+        when(userDaoMock.findById(subscriberUser.getId())).thenReturn(Optional.of(subscriberUser));
+        when(userDaoMock.save(initialUser)).thenReturn(initialUser);
+        when(userDaoMock.save(subscriberUser)).thenReturn(subscriberUser);
+
+        assertTrue(userService.subscribe(initialUser.getId(), subscriberUser.getId()));
+        assertTrue(initialUser.getFollowingIds().contains(subscriberUser.getId()));
+        assertTrue(subscriberUser.getFollowerIds().contains(initialUser.getId()));
+    }
+
+    @Test
+    @DisplayName("The unsubscription mechanism should work without errors if all the data is correct")
     public void unsubscribe() {
         User initialUser = new User("nik", "@nik");
         User subscriberUser = new User("oly", "@oly");
@@ -217,28 +210,21 @@ public class UserServiceTest extends AbsrtactTest {
         subscriberUser.setId(UUID.randomUUID());
         subscriberUser.setRegisteredSince(LocalDateTime.now());
 
-        User updateInitialUser = initialUser.clone();
-        User updateSubscriberUser = subscriberUser.clone();
+        initialUser.getFollowingIds().add(subscriberUser.getId());
+        subscriberUser.getFollowerIds().add(initialUser.getId());
 
-        updateInitialUser.getFollowingIds().add(subscriberUser.getId());
-        updateSubscriberUser.getFollowerIds().add(initialUser.getId());
+        when(userDaoMock.findById(initialUser.getId())).thenReturn(Optional.of(initialUser));
+        when(userDaoMock.findById(subscriberUser.getId())).thenReturn(Optional.of(subscriberUser));
+        when(userDaoMock.save(initialUser)).thenReturn(initialUser);
+        when(userDaoMock.save(subscriberUser)).thenReturn(subscriberUser);
 
-        updateInitialUser.getFollowingIds().remove(subscriberUser.getId());
-        updateSubscriberUser.getFollowerIds().remove(initialUser.getId());
-
-        when(userDaoMock.save(initialUser)).thenReturn(updateInitialUser);
-        when(userDaoMock.save(subscriberUser)).thenReturn(updateSubscriberUser);
-
-        userDaoMock.save(initialUser);
-        userDaoMock.save(subscriberUser);
-
-        assertNotEquals(updateInitialUser, updateSubscriberUser);
-        assertFalse(updateInitialUser.getFollowingIds().contains(updateSubscriberUser.getId()));
-        assertFalse(updateSubscriberUser.getFollowerIds().contains(updateInitialUser.getId()));
+        assertTrue(userService.unsubscribe(initialUser.getId(), subscriberUser.getId()));
+        assertFalse(initialUser.getFollowingIds().contains(subscriberUser.getId()));
+        assertFalse(subscriberUser.getFollowerIds().contains(initialUser.getId()));
     }
 
     @Test
-    @DisplayName("Find by Ids. Set Ids is not empty")
+    @DisplayName("Find by ids should return all users with valid id")
     public void findByIds() {
         User firstUser = new User("gena", "@gena");
         firstUser.setId(UUID.randomUUID());
@@ -255,16 +241,15 @@ public class UserServiceTest extends AbsrtactTest {
 
         when(userDaoMock.findByIds(uuidsSet)).thenReturn(usersSet);
 
-        assertEquals(userDaoMock.findByIds(uuidsSet), usersSet);
+        assertEquals(userService.findByIds(uuidsSet), usersSet);
     }
 
     @Test
     @DisplayName("Find by Ids. Set Ids is empty")
     public void findByIdsSetIdsIsEmpty() {
-        Set<UUID> uuidsSet = new HashSet<>();
+        Set<UUID> uuidsSet = Collections.emptySet();
 
-        assertTrue(uuidsSet.isEmpty());
-        assertEquals(uuidsSet, Collections.emptySet());
+        assertEquals(userService.findByIds(uuidsSet), Collections.emptySet());
     }
 
     @Test
@@ -275,7 +260,7 @@ public class UserServiceTest extends AbsrtactTest {
 
         when(userDaoMock.existsById(user.getId())).thenReturn(true);
 
-        assertTrue(userDaoMock.existsById(user.getId()));
+        assertTrue(userService.existById(user.getId()));
     }
 
     @Test
@@ -286,16 +271,28 @@ public class UserServiceTest extends AbsrtactTest {
 
         when(userDaoMock.findByLogin(user.getLogin())).thenReturn(Optional.of(user));
 
-        assertEquals(user, userDaoMock.findByLogin(user.getLogin()).get());
-        assertFalse(userDaoMock.findByLogin(user.getLogin()).isEmpty());
+        assertEquals(userService.findByLogin(user.getLogin()), Optional.of(user));
     }
 
     @Test
-    @DisplayName("Delete")
+    @DisplayName("Find by id")
+    public void findById() {
+        User user = new User("lesy", "@lesy");
+        user.setId(UUID.randomUUID());
+
+        when(userDaoMock.findById(user.getId())).thenReturn(Optional.of(user));
+
+        assertEquals(userService.findById(user.getId()), Optional.of(user));
+    }
+
+    @Test
+    @DisplayName("Delete user.")
     public void delete() {
         User user = new User("ira", "@ira");
         user.setId(UUID.randomUUID());
 
-        assertEquals(userDaoMock.delete(user), null);
+        when(userDaoMock.delete(user)).thenReturn(user);
+
+        assertEquals(userDaoMock.delete(user), user);
     }
 }

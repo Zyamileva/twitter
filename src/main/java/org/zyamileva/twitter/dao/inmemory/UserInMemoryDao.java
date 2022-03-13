@@ -29,7 +29,7 @@ public class UserInMemoryDao implements UserDao {
     @Override
     public Object delete(User entity) {
         Storage.getInstance().deleteUser(entity);
-        return null;
+        return entity;
     }
 
     @Override

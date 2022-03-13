@@ -100,7 +100,7 @@ public class LikeJDBCDao implements LikeDao {
             e.printStackTrace();
             log.error("Error during delete like " + entity);
         }
-        return null;
+        return entity;
     }
 
     @Override
