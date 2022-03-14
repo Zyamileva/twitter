@@ -88,7 +88,7 @@ public class TweetJDBCDao implements TweetDao {
 
 
     @Override
-    public Object delete(Tweet entity) {
+    public Tweet delete(Tweet entity) {
         final String deleteQuery = """
                 delete from tweets
                 where id = ?

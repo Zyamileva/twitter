@@ -133,7 +133,7 @@ public class UserJDBCDao implements UserDao {
     }
 
     @Override
-    public Object delete(User entity) {
+    public User delete(User entity) {
         final String deleteQuery = """
                 delete from users
                 where id = ?

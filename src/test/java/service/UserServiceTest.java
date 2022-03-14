@@ -143,7 +143,7 @@ public class UserServiceTest extends AbsrtactTest {
         initialUser.setId(UUID.randomUUID());
         initialUser.setRegisteredSince(LocalDateTime.now());
 
-        assertTrue(!userService.subscribe(initialUser.getId(), initialUser.getId()));
+        assertFalse(userService.subscribe(initialUser.getId(), initialUser.getId()));
     }
 
     @Test
@@ -154,8 +154,6 @@ public class UserServiceTest extends AbsrtactTest {
 
         subscriberUser.setId(UUID.randomUUID());
         subscriberUser.setRegisteredSince(LocalDateTime.now());
-        initialUser.setId(UUID.randomUUID());
-        initialUser.setRegisteredSince(LocalDateTime.now());
 
         when(userDaoMock.findById(initialUser.getId())).thenReturn(Optional.empty());
 
@@ -180,7 +178,7 @@ public class UserServiceTest extends AbsrtactTest {
 
     @Test
     @DisplayName("The subscription mechanism should work without errors if all the data is correct")
-    public void subscribe() {
+    public void subscriberUser() {
         User initialUser = new User("lera", "@lera");
         User subscriberUser = new User("igor", "@igor");
 
@@ -201,7 +199,7 @@ public class UserServiceTest extends AbsrtactTest {
 
     @Test
     @DisplayName("The unsubscription mechanism should work without errors if all the data is correct")
-    public void unsubscribe() {
+    public void unsubscribeUser() {
         User initialUser = new User("nik", "@nik");
         User subscriberUser = new User("oly", "@oly");
 
@@ -245,7 +243,7 @@ public class UserServiceTest extends AbsrtactTest {
     }
 
     @Test
-    @DisplayName("Find by Ids. Set Ids is empty")
+    @DisplayName("Search by IDs when passed Set IDs is empty")
     public void findByIdsSetIdsIsEmpty() {
         Set<UUID> uuidsSet = Collections.emptySet();
 

@@ -83,7 +83,7 @@ public class RetweetJDBCDao implements RetweetDao {
     }
 
     @Override
-    public Object delete(Retweet entity) {
+    public Retweet delete(Retweet entity) {
         final String deleteQuery = """
                 delete from retweets
                 where id = ?

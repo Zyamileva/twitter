@@ -1,7 +1,7 @@
 package utils;
 
 public class TestUtils {
-    public static String[] stringsToArray(String... s) {
-        return s;
+    public static String[] stringsToArray(String... strings) {
+        return strings;
     }
 }

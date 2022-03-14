@@ -13,5 +13,5 @@ public interface GenericDao<T extends PersistentEntity> {
 
     List findAll();
 
-    Object delete(T entity);
+    T delete(T entity);
 }

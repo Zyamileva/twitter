@@ -86,7 +86,7 @@ public class LikeJDBCDao implements LikeDao {
     }
 
     @Override
-    public Object delete(Like entity) {
+    public Like delete(Like entity) {
         final String deleteQuery = """
                 delete from likes
                 where id = ?
