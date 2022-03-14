@@ -22,7 +22,7 @@ public class UserInMemoryDao implements UserDao {
     }
 
     @Override
-    public List findAll() {
+    public List<User> findAll() {
         return Storage.getInstance().findAllUsers();
     }
 

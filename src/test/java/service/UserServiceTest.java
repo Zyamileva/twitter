@@ -284,7 +284,7 @@ public class UserServiceTest extends AbsrtactTest {
     }
 
     @Test
-    @DisplayName("Delete user.")
+    @DisplayName("Delete user")
     public void delete() {
         User user = new User("ira", "@ira");
         user.setId(UUID.randomUUID());
