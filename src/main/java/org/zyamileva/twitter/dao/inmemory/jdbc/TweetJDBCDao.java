@@ -67,7 +67,7 @@ public class TweetJDBCDao implements TweetDao {
     }
 
     @Override
-    public List findAll() {
+    public List<Tweet> findAll() {
         final String findALLTweetsQuery = """
                 select *
                 from tweets
@@ -101,8 +101,9 @@ public class TweetJDBCDao implements TweetDao {
         } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during delete tweet " + entity);
+            return null;
         }
-        return null;
+        return entity;
     }
 
     @Override

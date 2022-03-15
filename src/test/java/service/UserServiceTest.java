@@ -1,12 +1,10 @@
 package service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 import org.zyamileva.twitter.entities.User;
 import org.zyamileva.twitter.model.CreateUserResponse;
 import org.zyamileva.twitter.service.UserService;
@@ -150,30 +148,28 @@ public class UserServiceTest extends AbsrtactTest {
     @DisplayName("InitialUser must not be subscribe because invalid userId")
     public void initialUserMustNotBeSubscribeInvalidUserId() {
         User subscriberUser = new User("ann", "@ann");
-        User initialUser = new User("igor", "@igor");
+        UUID wrongId = UUID.randomUUID();
 
         subscriberUser.setId(UUID.randomUUID());
         subscriberUser.setRegisteredSince(LocalDateTime.now());
 
-        when(userDaoMock.findById(initialUser.getId())).thenReturn(Optional.empty());
+        when(userDaoMock.findById(wrongId)).thenReturn(Optional.empty());
 
-        assertTrue(!userService.subscribe(subscriberUser.getId(), initialUser.getId()));
+        assertFalse(userService.subscribe(subscriberUser.getId(), wrongId));
     }
 
     @Test
     @DisplayName("SubscribeUser must not be subscribe because invalid userId")
     public void subscribeUserMustNotBeSubscribeInvalidUserId() {
         User initialUser = new User("aaan", "@an");
-        User subscriberUser = new User("vova", "@vova");
+        UUID wrongId = UUID.randomUUID();
 
         initialUser.setId(UUID.randomUUID());
         initialUser.setRegisteredSince(LocalDateTime.now());
-        subscriberUser.setId(UUID.randomUUID());
-        subscriberUser.setRegisteredSince(LocalDateTime.now());
 
-        when(userDaoMock.findById(subscriberUser.getId())).thenReturn(Optional.empty());
+        when(userDaoMock.findById(wrongId)).thenReturn(Optional.empty());
 
-        assertTrue(!userService.subscribe(subscriberUser.getId(), initialUser.getId()));
+        assertFalse(userService.subscribe(wrongId, initialUser.getId()));
     }
 
     @Test
@@ -262,6 +258,16 @@ public class UserServiceTest extends AbsrtactTest {
     }
 
     @Test
+    @DisplayName("Find by Login when invalid login")
+    public void findByInvalidLogin() {
+        String invalidLogin = "Login";
+
+        when(userDaoMock.findByLogin(invalidLogin)).thenReturn(Optional.empty());
+
+        assertEquals(userService.findByLogin(invalidLogin), Optional.empty());
+    }
+
+    @Test
     @DisplayName("Find by Login")
     public void findByLogin() {
         User user = new User("lera", "@lera");
@@ -270,6 +276,16 @@ public class UserServiceTest extends AbsrtactTest {
         when(userDaoMock.findByLogin(user.getLogin())).thenReturn(Optional.of(user));
 
         assertEquals(userService.findByLogin(user.getLogin()), Optional.of(user));
+    }
+
+    @Test
+    @DisplayName("Find by id when invalid id")
+    public void findByInvalidId() {
+        UUID invalidId = UUID.randomUUID();
+
+        when(userDaoMock.findById(invalidId)).thenReturn(Optional.empty());
+
+        assertEquals(userService.findById(invalidId), Optional.empty());
     }
 
     @Test
