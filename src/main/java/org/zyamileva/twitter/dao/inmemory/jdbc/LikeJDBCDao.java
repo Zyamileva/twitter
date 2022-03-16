@@ -66,7 +66,7 @@ public class LikeJDBCDao implements LikeDao {
     }
 
     @Override
-    public List findAll() {
+    public List<Like> findAll() {
         final String findAllLikesQuery = """
                 select *
                 from likes
@@ -86,7 +86,7 @@ public class LikeJDBCDao implements LikeDao {
     }
 
     @Override
-    public void delete(Like entity) {
+    public Like delete(Like entity) {
         final String deleteQuery = """
                 delete from likes
                 where id = ?
@@ -99,7 +99,9 @@ public class LikeJDBCDao implements LikeDao {
         } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during delete like " + entity);
+            return null;
         }
+        return entity;
     }
 
     @Override

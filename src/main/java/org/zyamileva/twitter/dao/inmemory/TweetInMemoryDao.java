@@ -32,8 +32,9 @@ public class TweetInMemoryDao implements TweetDao {
     }
 
     @Override
-    public void delete(Tweet entity) {
+    public Tweet delete(Tweet entity) {
         Storage.getInstance().deleteTweet(entity);
+        return entity;
     }
 
     @Override

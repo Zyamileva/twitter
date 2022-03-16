@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.zyamileva.twitter.configuration.options.Context;
 import org.zyamileva.twitter.dao.UserDao;
 import org.zyamileva.twitter.entities.User;
+import org.zyamileva.twitter.model.CreateUserResponse;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -20,13 +21,16 @@ public class UserServiceImpl implements UserService {
     private static final int MAX_LENGTH_USER_NAME = 20;
 
     @Override
-    public Optional<User> saveUser(User user) {
+    public CreateUserResponse saveUser(User user) {
         Set<String> validationErrors = validateUser(user);
+        Optional<User> userOptional;
         if (validationErrors.isEmpty()) {
-            return Optional.of(userDao.save(user));
+            userOptional = Optional.of(userDao.save(user));
+        } else {
+            log.error(validationErrors);
+            userOptional = Optional.empty();
         }
-        log.error(validationErrors);
-        return Optional.empty();
+        return new CreateUserResponse(userOptional, validationErrors);
     }
 
     static boolean validateLogin(String login) {
@@ -56,17 +60,14 @@ public class UserServiceImpl implements UserService {
         }
         if (user.getLogin().isEmpty() || user.getLogin().isBlank()) {
             validationErrors.add("Login must not be empty or blank");
-        }
-        if (user.getUsername().isEmpty() || user.getUsername().isBlank()) {
-            validationErrors.add("Username must not be empty or blank");
-        }
-        if (!validateLogin(user.getLogin())) {
+        } else if (!validateLogin(user.getLogin())) {
             validationErrors.add("Login must start with the @ sign. It can contain an underscore character " +
                     "and at least one lowercase letter. It must be at least 3 and no more than 14 characters");
         }
-        if (!validateUserName(user.getUsername())) {
-            validationErrors.add("The username can contain letters, numbers, a space character and be at " +
-                    "least 2 characters and no more than 20 characters");
+        if (user.getUsername().isEmpty() || user.getUsername().isBlank()) {
+            validationErrors.add("Username must not be empty or blank");
+        } else if (!validateUserName(user.getUsername())) {
+            validationErrors.add("Username should have length from 2 to 20 characters inclusive. Spaces, numbers and other characters allowed.");
         }
         if (validationErrors.isEmpty()) {
             validationErrors.addAll(validateIfLoginAvailable(user));
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
     private boolean manageSubscriptions(UUID initialUserId, UUID subscriberUserId, BiConsumer<User, User> action) {
         if (initialUserId.equals(subscriberUserId)) {
-            log.error("You can't subscribe youself");
+            log.error("You can't subscribe yourself");
             return false;
         }
         Optional<User> initialUserOptional = userDao.findById(initialUserId);
