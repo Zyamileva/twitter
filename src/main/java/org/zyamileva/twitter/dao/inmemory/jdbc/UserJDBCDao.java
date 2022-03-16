@@ -113,7 +113,7 @@ public class UserJDBCDao implements UserDao {
     }
 
     @Override
-    public List findAll() {
+    public List<User> findAll() {
         final String findALLUsersQuery = """
                 select *
                 from users
@@ -133,7 +133,7 @@ public class UserJDBCDao implements UserDao {
     }
 
     @Override
-    public Object delete(User entity) {
+    public User delete(User entity) {
         final String deleteQuery = """
                 delete from users
                 where id = ?
@@ -146,9 +146,9 @@ public class UserJDBCDao implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during delete user " + entity);
+            return null;
         }
-
-        return null;
+        return entity;
     }
 
     @Override
@@ -201,7 +201,7 @@ public class UserJDBCDao implements UserDao {
     @Override
     public boolean existsById(UUID id) {
         final String existsByIdQuery = """
-                select * 
+                select *
                 from users
                 where id = ?
                 """;

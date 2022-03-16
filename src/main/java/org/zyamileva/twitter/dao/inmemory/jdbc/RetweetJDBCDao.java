@@ -63,7 +63,7 @@ public class RetweetJDBCDao implements RetweetDao {
     }
 
     @Override
-    public List findAll() {
+    public List<Retweet> findAll() {
         final String findAllRetweetsQuery = """
                 select *
                 from retweets
@@ -83,7 +83,7 @@ public class RetweetJDBCDao implements RetweetDao {
     }
 
     @Override
-    public Object delete(Retweet entity) {
+    public Retweet delete(Retweet entity) {
         final String deleteQuery = """
                 delete from retweets
                 where id = ?
@@ -96,8 +96,9 @@ public class RetweetJDBCDao implements RetweetDao {
         } catch (SQLException e) {
             e.printStackTrace();
             log.error("Error during delete retweet " + entity);
+            return null;
         }
-        return null;
+        return entity;
     }
 
     @Override

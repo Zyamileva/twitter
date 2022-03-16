@@ -22,14 +22,14 @@ public class UserInMemoryDao implements UserDao {
     }
 
     @Override
-    public List findAll() {
+    public List<User> findAll() {
         return Storage.getInstance().findAllUsers();
     }
 
     @Override
-    public Object delete(User entity) {
+    public User delete(User entity) {
         Storage.getInstance().deleteUser(entity);
-        return null;
+        return entity;
     }
 
     @Override
@@ -52,6 +52,6 @@ public class UserInMemoryDao implements UserDao {
     public boolean existsById(UUID id) {
         return Storage.getInstance().findAllUsers()
                 .stream()
-                .anyMatch(ids->ids.getId().equals(id));
+                .anyMatch(ids -> ids.getId().equals(id));
     }
 }

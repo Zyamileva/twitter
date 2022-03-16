@@ -11,7 +11,7 @@ public interface GenericDao<T extends PersistentEntity> {
 
     Optional<T> findById(UUID id);
 
-    List findAll();
+    List<T> findAll();
 
-    Object delete(T entity);
+    T delete(T entity);
 }

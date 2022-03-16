@@ -28,9 +28,9 @@ public class LikeInMemoryDao implements LikeDao {
     }
 
     @Override
-    public Object delete(Like entity) {
+    public Like delete(Like entity) {
         Storage.getInstance().deleteLike(entity);
-        return null;
+        return entity;
     }
 
     @Override

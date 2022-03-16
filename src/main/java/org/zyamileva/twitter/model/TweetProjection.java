@@ -1,7 +1,5 @@
 package org.zyamileva.twitter.model;
 
-import org.zyamileva.twitter.utils.StringUtils;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
