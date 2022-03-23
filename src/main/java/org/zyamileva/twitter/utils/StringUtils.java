@@ -3,6 +3,8 @@ package org.zyamileva.twitter.utils;
 public class StringUtils {
 
     public static final String SEPARATOR = "------------------------------------------------------------";
+    public static final String SEPARATOR_LONG = "-".repeat(60);
+    public static final String SEPARATOR_SHORT = "-".repeat(40);
     public static final String SPACE = " ";
     public static final String NEW_LINE = "\n";
     public static final String LIKE_EMOJI = "\uD83D\uDC99";
